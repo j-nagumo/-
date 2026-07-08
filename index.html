@@ -22,17 +22,34 @@
     border-bottom: 2px solid #ddd;
     padding-bottom: 12px;
   }
+  h2 {
+    font-size: 16px;
+    margin: 28px 0 12px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2b6cb0;
+    display: inline-block;
+  }
   ul {
     list-style: none;
     padding: 0;
+    margin: 0;
   }
   li {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   a {
     display: block;
     background: #fff;
-    padding: 16px 20px;
+    padding: 14px 20px;
     border-radius: 8px;
     text-decoration: none;
     color: #2b6cb0;
@@ -48,11 +65,17 @@
 <body>
   <div class="container">
     <h1>リサーチ資料一覧</h1>
+
+    <h2>ビタミンC</h2>
     <ul>
       <li><a href="liposomal_vitc_research.html">リポソームビタミンC研究</a></li>
+      <li><a href="vitc_d_formulation_mechanism.html">ビタミンC+D配合メカニズム</a></li>
+    </ul>
+
+    <h2>腸活</h2>
+    <ul>
       <li><a href="probiotic_research.html">プロバイオティクス研究</a></li>
       <li><a href="relay_mechanism_research.html">リレー機構の研究</a></li>
-      <li><a href="vitc_d_formulation_mechanism.html">ビタミンC+D配合メカニズム</a></li>
     </ul>
   </div>
 </body>
