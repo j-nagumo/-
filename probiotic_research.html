@@ -1,0 +1,450 @@
+<style>
+  :root {
+    --bg: #FAFAF6;
+    --surface: #FFFFFF;
+    --surface-2: #F2F4EE;
+    --ink: #1B211A;
+    --ink-soft: #4E564B;
+    --ink-faint: #838C7E;
+    --line: #E4E8DE;
+    --line-strong: #CCD3C6;
+    --accent: #3E7A5A;        /* 発酵グリーン */
+    --accent-deep: #2C6045;
+    --accent-wash: #E6F0EA;
+    /* 3役割カラー */
+    --gate: #3E7CB1;          /* 門番=ロイテリ菌 */
+    --gate-wash: #E4EEF6;
+    --soil: #C08A3E;          /* 土壌=酪酸菌 */
+    --soil-wash: #F7EEDD;
+    --core: #4E9E6B;          /* 主力=ビフィズス/乳酸菌 */
+    --core-wash: #E6F2EA;
+    --avoid: #C0453B;
+    --avoid-wash: #F8E8E5;
+    --caution: #B07A1E;
+    --caution-wash: #F6EEDC;
+    --shadow: 0 1px 2px rgba(27,33,26,.04), 0 8px 24px rgba(27,33,26,.06);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111410; --surface: #191D17; --surface-2: #20251E;
+      --ink: #ECF0E8; --ink-soft: #B6BEB0; --ink-faint: #7F887A;
+      --line: #2A2F26; --line-strong: #3B4235;
+      --accent: #5FB587; --accent-deep: #7FCEA0; --accent-wash: #17281F;
+      --gate: #6FA8D6; --gate-wash: #17293A;
+      --soil: #DAA85B; --soil-wash: #322813;
+      --core: #6DBE8B; --core-wash: #16301F;
+      --avoid: #E4746A; --avoid-wash: #35201D;
+      --caution: #D6A94A; --caution-wash: #322815;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #FAFAF6; --surface: #FFFFFF; --surface-2: #F2F4EE;
+    --ink: #1B211A; --ink-soft: #4E564B; --ink-faint: #838C7E;
+    --line: #E4E8DE; --line-strong: #CCD3C6;
+    --accent: #3E7A5A; --accent-deep: #2C6045; --accent-wash: #E6F0EA;
+    --gate: #3E7CB1; --gate-wash: #E4EEF6;
+    --soil: #C08A3E; --soil-wash: #F7EEDD;
+    --core: #4E9E6B; --core-wash: #E6F2EA;
+    --avoid: #C0453B; --avoid-wash: #F8E8E5;
+    --caution: #B07A1E; --caution-wash: #F6EEDC;
+    --shadow: 0 1px 2px rgba(27,33,26,.04), 0 8px 24px rgba(27,33,26,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #111410; --surface: #191D17; --surface-2: #20251E;
+    --ink: #ECF0E8; --ink-soft: #B6BEB0; --ink-faint: #7F887A;
+    --line: #2A2F26; --line-strong: #3B4235;
+    --accent: #5FB587; --accent-deep: #7FCEA0; --accent-wash: #17281F;
+    --gate: #6FA8D6; --gate-wash: #17293A;
+    --soil: #DAA85B; --soil-wash: #322813;
+    --core: #6DBE8B; --core-wash: #16301F;
+    --avoid: #E4746A; --avoid-wash: #35201D;
+    --caution: #D6A94A; --caution-wash: #322815;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header.top { border-top: 4px solid var(--accent); padding: 56px 0 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-deep); font-weight: 700; margin: 0 0 18px; }
+  h1.title { font-size: clamp(27px, 4.2vw, 40px); line-height: 1.28; font-weight: 800; letter-spacing: .01em; margin: 0 0 20px; text-wrap: balance; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 8px; }
+  .meta-chip { font-size: 12.5px; color: var(--ink-soft); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+  .meta-chip b { color: var(--ink); font-weight: 700; }
+
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 24px; }
+  .sec-no { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: .05em; font-variant-numeric: tabular-nums; padding-top: 4px; min-width: 26px; }
+  h2 { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; margin: 0; letter-spacing: .01em; }
+  h2 .sub { display: block; font-size: 13px; font-weight: 600; color: var(--ink-faint); letter-spacing: .04em; margin-top: 4px; }
+  p { margin: 0 0 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 700; }
+
+  /* summary */
+  .summary-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 26px 30px; }
+  ul.clean { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  ul.clean > li { position: relative; padding-left: 26px; color: var(--ink-soft); }
+  ul.clean > li::before { content: ""; position: absolute; left: 4px; top: 11px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  /* role story — 主役 */
+  .role-intro { text-align: center; margin-bottom: 22px; }
+  .role-intro .big { font-size: clamp(18px, 2.4vw, 23px); font-weight: 800; color: var(--ink); }
+  .role-intro .big s { color: var(--ink-faint); text-decoration-color: var(--avoid); text-decoration-thickness: 2px; }
+  .role-intro .big em { font-style: normal; color: var(--accent-deep); }
+  .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: stretch; }
+  .role { border-radius: 16px; padding: 22px 22px 24px; border: 1px solid var(--line); box-shadow: var(--shadow); position: relative; overflow: hidden; background: var(--surface); }
+  .role::before { content:""; position:absolute; top:0; left:0; right:0; height: 5px; }
+  .role.gate::before { background: var(--gate); }
+  .role.soil::before { background: var(--soil); }
+  .role.core::before { background: var(--core); }
+  .role .icon { font-size: 30px; line-height: 1; margin-bottom: 12px; }
+  .role .rlabel { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .role.gate .rlabel { color: var(--gate); }
+  .role.soil .rlabel { color: var(--soil); }
+  .role.core .rlabel { color: var(--core); }
+  .role h3 { margin: 0 0 8px; font-size: 18px; font-weight: 800; }
+  .role p { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .role .bac { display:inline-block; margin-top: 12px; font-size: 12px; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
+  .role.gate .bac { background: var(--gate-wash); color: var(--gate); }
+  .role.soil .bac { background: var(--soil-wash); color: var(--soil); }
+  .role.core .bac { background: var(--core-wash); color: var(--core); }
+  @media (max-width: 620px) { .roles { grid-template-columns: 1fr; } }
+
+  /* stat tiles */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; margin: 4px 0 20px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .stat .fig { font-size: 25px; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
+  .stat .fig small { font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+  .stat .lbl { font-size: 12.5px; color: var(--ink-faint); margin-top: 4px; }
+  .stat .src { font-size: 11px; color: var(--ink-faint); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line-strong); }
+  .trendrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .trend { font-size: 12.5px; font-weight: 600; background: var(--accent-wash); color: var(--accent-deep); border-radius: 999px; padding: 6px 13px; }
+
+  /* tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 12.5px; }
+  th, td { text-align: left; padding: 11px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); color: var(--ink-soft); font-weight: 700; font-size: 11.5px; letter-spacing: .03em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.rec { background: var(--accent-wash); }
+  td.price { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); font-weight: 600; }
+  .brand { font-weight: 700; color: var(--ink); }
+  .schip { display:inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .schip.many { background: var(--soil-wash); color: var(--soil); }
+  .schip.focus { background: var(--gate-wash); color: var(--gate); }
+  .schip.rec { background: var(--core-wash); color: var(--core); }
+
+  /* voice */
+  .voice { display: grid; grid-template-columns: repeat(auto-fit, minmax(235px,1fr)); gap: 12px; }
+  .voice blockquote { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px; font-size: 13.5px; color: var(--ink); }
+  .voice blockquote::before { content:"“"; font-size: 30px; color: var(--accent); line-height: 0; position: relative; top: 10px; margin-right: 4px; }
+  .insight { background: var(--accent-wash); border: 1px solid var(--accent); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+  .insight b { color: var(--accent-deep); }
+
+  /* gaps */
+  .gap-list { display: flex; flex-direction: column; gap: 10px; }
+  .gap { display: grid; grid-template-columns: minmax(150px, 290px) 1fr; gap: 6px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+  .gap .g-need { font-weight: 700; color: var(--avoid); font-size: 13.5px; }
+  .gap .g-sol { color: var(--ink-soft); font-size: 13.5px; }
+  .gap .g-sol b { color: var(--ink); }
+  @media (max-width: 560px) { .gap { grid-template-columns: 1fr; } }
+
+  /* recipe cards (3案) */
+  .recipes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .recipe { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px 22px 24px; position: relative; overflow: hidden; }
+  .recipe::before { content:""; position:absolute; top:0; left:0; right:0; height: 5px; }
+  .recipe.r1::before { background: var(--core); }
+  .recipe.r2::before { background: var(--gate); }
+  .recipe.r3::before { background: var(--soil); }
+  .recipe .tier { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .recipe h3 { margin: 4px 0 12px; font-size: 17px; font-weight: 800; }
+  .recipe .combo { font-size: 13.5px; color: var(--ink); font-weight: 600; line-height: 1.55; margin-bottom: 12px; }
+  .recipe .row { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--line); }
+  .recipe .row .k { color: var(--ink-faint); }
+  .recipe .row .v { color: var(--ink); font-weight: 600; text-align: right; }
+  .recipe .price { font-variant-numeric: tabular-nums; }
+  @media (max-width: 720px) { .recipes { grid-template-columns: 1fr; } }
+
+  /* phases */
+  .phases { display: flex; flex-direction: column; }
+  .phase { display: grid; grid-template-columns: 130px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: none; }
+  .phase .when { font-weight: 800; color: var(--accent-deep); font-size: 15px; }
+  .phase .when small { display:block; font-weight: 600; color: var(--ink-faint); font-size: 11.5px; letter-spacing: .05em; margin-top: 3px; }
+  .phase ul { margin: 0; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; display:flex; flex-direction:column; gap:7px; }
+  .phase ul b { color: var(--ink); }
+  @media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* risks */
+  .risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 12px; }
+  .risk { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--caution); border-radius: 0 12px 12px 0; padding: 14px 18px; }
+  .risk h4 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--ink); }
+  .risk p { margin: 0; font-size: 13px; }
+
+  footer { padding: 34px 0 60px; border-top: 1px solid var(--line); }
+  .qa-banner { display:flex; flex-wrap:wrap; align-items:center; gap: 10px 16px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 12px; padding: 14px 20px; font-size: 13px; color: var(--ink); }
+  .qa-banner .badge { font-weight: 800; color: var(--accent-deep); letter-spacing: .04em; }
+  .src-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .src-list li { font-size: 12.5px; color: var(--ink-faint); }
+  .src-list a { color: var(--accent-deep); text-decoration: none; word-break: break-all; }
+  .src-list a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">社内共有資料 · 菌の組み合わせ戦略</p>
+    <h1 class="title">腸活サプリ｜菌の「組み合わせ」で<br>Amazonで差別化する新商品リサーチ</h1>
+    <div class="meta-row">
+      <span class="meta-chip">対象 <b>腸活・睡眠・ストレスサプリ（日本・Amazon中心）</b></span>
+      <span class="meta-chip">用途 <b>菌の組み合わせによる処方決定</b></span>
+      <span class="meta-chip">調査日 <b class="num">2026-07-08</b></span>
+      <span class="meta-chip">モジュール <b>M2 市場 / M4 売れ筋 / M1 競合</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. 結論 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">01</span><h2>結論（Executive Summary）</h2></div>
+      <div class="summary-card">
+        <ul class="clean">
+          <li><b>市場は年6%台で伸びる成熟市場</b>。日本のプロバイオティクス市場は2025年 約42.7億米ドル、2026〜2034年 CAGR 6.38%（IMARC Group）。腸活は免疫・ダイエットに加え<b>ストレス・睡眠カテゴリへ訴求が拡大</b>（富士経済）。</li>
+          <li>売れ筋の多くは<b>「菌の種類・数を盛る」戦略で飽和</b>（27種類6兆個など）。顧客は「種類が多すぎて選べない・効果を感じにくい」と感じている＝ここが差別化の隙間。</li>
+          <li>推奨は「数を盛る」ではなく <b>「役割分担のストーリー」</b>。特に<b>ロイテリ菌は単体・低価格帯に留まり複合展開が手つかず</b>＝先行者になれる。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 役割分担ストーリー（主役） -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">02</span><h2>差別化の核：菌の「役割分担」ストーリー<span class="sub">数の多さではなく、なぜこの組み合わせなのかを語る</span></h2></div>
+      <div class="role-intro">
+        <p class="big"><s>27種類 6兆個…</s> の数比べから降りて、<em>3つの役割</em>で語る</p>
+      </div>
+      <div class="roles">
+        <div class="role gate">
+          <div class="icon">🚪</div>
+          <div class="rlabel">Gatekeeper ／ 門番</div>
+          <h3>ロイテリ菌</h3>
+          <p>悪玉菌を感知した時だけ抗菌物質ロイテリンを出し、<b>善玉菌は傷つけず悪玉菌だけを抑制</b>する選択的な作用（BioGaia社解説）。</p>
+          <span class="bac">悪玉菌だけ狙い撃ち</span>
+        </div>
+        <div class="role soil">
+          <div class="icon">🌱</div>
+          <div class="rlabel">Soil ／ 土壌</div>
+          <h3>酪酸菌</h3>
+          <p>大腸のエネルギー源「酪酸」を作り、<b>ビフィズス菌など他の善玉菌が棲みやすい環境</b>を整える土壌係。</p>
+          <span class="bac">善玉菌が育つ土をつくる</span>
+        </div>
+        <div class="role core">
+          <div class="icon">💪</div>
+          <div class="rlabel">Core ／ 主力</div>
+          <h3>ビフィズス菌／乳酸菌</h3>
+          <p>実際に腸で働く主力部隊。乳酸菌は小腸、<b>ビフィズス菌は大腸</b>で活躍し、整った土壌の上で力を発揮。</p>
+          <span class="bac">腸で実働する主力</span>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:18px">
+        <b>なぜ効く物語か:</b> 「酪酸菌がビフィズス菌の生育環境を作る」「ロイテリ菌は善玉菌を守る」という<b>科学的に説明できる相互作用</b>を訴求文に落とせる。単なる「◯種類配合」より、購入理由が明確になる。
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 市場 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">03</span><h2>市場・環境<span class="sub">成熟市場だが、睡眠・ストレスへ訴求が広がり中</span></h2></div>
+      <div class="stats">
+        <div class="stat">
+          <div class="fig num">約42.7<small>億USD</small></div>
+          <div class="lbl">日本プロバイオティクス市場（2025年）</div>
+          <div class="src">IMARC Group（民間調査・強気予測の可能性）</div>
+        </div>
+        <div class="stat">
+          <div class="fig num">6.38<small>%</small></div>
+          <div class="lbl">CAGR（2026〜2034年予測）</div>
+          <div class="src">IMARC Group</div>
+        </div>
+        <div class="stat">
+          <div class="fig num">100<small>億個/日</small></div>
+          <div class="lbl">効果実感に必要とされる菌量の目安</div>
+          <div class="src">栄養系メディア各社</div>
+        </div>
+      </div>
+      <p style="margin-bottom:8px"><strong>2026年 腸活トレンドキーワード:</strong></p>
+      <div class="trendrow">
+        <span class="trend">脳腸相関（セロトニンの約9割は腸で生成）</span>
+        <span class="trend">ポストバイオティクス（菌の代謝産物）</span>
+        <span class="trend">ストレス→善玉菌減少（Cell誌報道）</span>
+        <span class="trend">睡眠市場の第二波（2025-2026）</span>
+      </div>
+      <p style="margin-top:14px">OEMの観点では<strong>腸活は届出実績が最多で最も参入しやすいカテゴリ</strong>、睡眠は機能性表示で高単価化しやすい（食品OEM業界メディア）。</p>
+    </div>
+  </section>
+
+  <!-- 4. 競合の菌の組み合わせ -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">04</span><h2>競合の菌の組み合わせ<span class="sub">Amazon／価格.com 売れ筋の配合戦略（緑行＝自社推奨案）</span></h2></div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>商品名</th><th>ブランド</th><th>価格</th><th>配合菌・組み合わせ</th><th>戦略</th><th>機能訴求</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="brand">BIFIRAL</span></td><td>悩み解決ラボ</td><td class="price">3,180円</td><td>乳酸菌19種＋ビフィズス菌4種（1500億〜）</td><td><span class="schip many">数を盛る</span></td><td>腸活全般</td></tr>
+            <tr><td><span class="brand">菌トレ習慣 HYPER</span></td><td>Growth canvas</td><td class="price">2,980円</td><td>乳酸菌20兆＋酪酸菌＋ラクトフェリン（31種）</td><td><span class="schip many">数＋上位版</span></td><td>腸活全般（★3.9・537件）</td></tr>
+            <tr><td><span class="brand">めぐみの乳酸菌</span></td><td>ヘルシープラス</td><td class="price">1,380円</td><td>27種類の乳酸菌・6兆個</td><td><span class="schip many">数を盛る</span></td><td>腸活全般</td></tr>
+            <tr><td><span class="brand">ビオナス</span></td><td>レバンテ</td><td class="price">1,058〜2,000円</td><td>乳酸菌＋ビフィズス菌＋酪酸菌＋ナットウキナーゼ</td><td><span class="schip many">4菌複合</span></td><td>「相性のよい4菌」訴求</td></tr>
+            <tr><td><span class="brand">マイビオ</span></td><td>メタボリック</td><td class="price">733円</td><td>ビフィズス菌＋ラブレ菌＋ガセリ菌＋酪酸菌</td><td><span class="schip many">4菌複合</span></td><td>分包・携帯性</td></tr>
+            <tr><td><span class="brand">内脂サポート</span></td><td>FANCL</td><td class="price">2,760〜3,888円</td><td>ビフィズス菌2種のみ</td><td><span class="schip focus">絞る</span></td><td>体重・体脂肪（機能性表示）</td></tr>
+            <tr><td><span class="brand">ディアナチュラGOLD 乳酸菌CP2305</span></td><td>アサヒ</td><td class="price">要確認</td><td>ガセリ菌CP2305株のみ（100億個）</td><td><span class="schip focus">絞る・単一株</span></td><td>睡眠の質＋腸内環境（機能性表示）</td></tr>
+            <tr><td><span class="brand">ロイテリ菌タブレット各種</span></td><td>小規模ブランド多数</td><td class="price">980円〜</td><td>ロイテリ菌単体（10〜15億個）</td><td><span class="schip focus">単一・ニッチ</span></td><td>エチケット中心（複合は手つかず）</td></tr>
+            <tr class="rec"><td><span class="brand">【推奨①】腸活ベーシック</span></td><td>自社案</td><td class="price">1,500〜2,500円</td><td>ロイテリ菌＋酪酸菌＋ビフィズス菌</td><td><span class="schip rec">役割分担</span></td><td>腸活入門</td></tr>
+            <tr class="rec"><td><span class="brand">【推奨②】睡眠・ストレスケア</span></td><td>自社案</td><td class="price">2,500〜3,500円</td><td>ガセリ菌CP2305系＋ロイテリ菌＋GABA/テアニン</td><td><span class="schip rec">役割＋機能素材</span></td><td>睡眠・ストレス（腸脳相関）</td></tr>
+            <tr class="rec"><td><span class="brand">【推奨③】美容・体脂肪ケア</span></td><td>自社案</td><td class="price">2,760〜3,888円</td><td>ビフィズス菌＋乳酸菌＋ラクトフェリン</td><td><span class="schip rec">FANCL型</span></td><td>体重・体脂肪</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px"><strong>構図:</strong> 売れ筋は「数を盛る」が主流だが、FANCL・ディアナチュラのように<strong>「絞って機能性表示で語る」パターンも上位</strong>。ロイテリ菌の複合商品は空白地帯。</p>
+    </div>
+  </section>
+
+  <!-- 5. 顧客の声 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">05</span><h2>顧客の声<span class="sub">「選べない」「効果を感じない」が二大不満</span></h2></div>
+      <div class="voice">
+        <blockquote>菌の種類が多すぎて、どれを選べばいいかわからない</blockquote>
+        <blockquote>飲んでも変化がない気がする</blockquote>
+        <blockquote>摂った菌は1〜2日で排出され、腸に定着しにくい</blockquote>
+        <blockquote>効果実感には1日100億個以上が必要らしい</blockquote>
+        <blockquote>基本版で効果を感じたので上位版を試したら圧倒的に良かった（菌トレHYPER）</blockquote>
+        <blockquote>実感まで1〜3か月は続ける必要がある</blockquote>
+      </div>
+      <div class="insight">
+        <b>インサイト:</b> 「選べない」不満は、<b>役割分担の物語（門番・土壌・主力）で"選びやすさ"に転換</b>できる。また「基本→上位で満足度UP」の声は、<b>松竹梅アップセルが機能する市場</b>である裏付け。
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 機会仮説 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">06</span><h2>機会仮説と差別化ポイント</h2></div>
+      <div class="gap-list">
+        <div class="gap"><div class="g-need">「種類が多すぎて選べない」</div><div class="g-sol">数を盛らず<b>「役割分担」を明確に言語化</b>（門番＝ロイテリ／土壌＝酪酸菌／主力＝ビフィズス）</div></div>
+        <div class="gap"><div class="g-need">「効果を感じない」</div><div class="g-sol">科学的に説明できる<b>相互作用</b>（酪酸菌が土壌を作る等）を訴求文に明記</div></div>
+        <div class="gap"><div class="g-need">ロイテリ菌が単体・低価格帯止まり</div><div class="g-sol"><b>複合サプリの主役級に格上げ</b>して展開する会社がまだいない＝先行者になれる</div></div>
+        <div class="gap"><div class="g-need">腸活と睡眠・ストレスが別カテゴリ扱い</div><div class="g-sol"><b>ガセリ菌CP2305系＋ロイテリ菌</b>で「腸活×メンタル」を1商品に統合</div></div>
+        <div class="gap"><div class="g-need">アップセルが機能する市場（菌トレ習慣）</div><div class="g-sol"><b>ベーシック→上位版</b>の2段構えを最初から設計</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 3処方案 + アクション -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">07</span><h2>推奨する菌の組み合わせ 3案<span class="sub">カテゴリ別の処方と価格</span></h2></div>
+      <div class="recipes">
+        <div class="recipe r1">
+          <div class="tier">① 入門・王道ライン</div>
+          <h3>腸活ベーシック</h3>
+          <div class="combo">ロイテリ菌 ＋ 酪酸菌 ＋ ビフィズス菌</div>
+          <div class="row"><span class="k">訴求</span><span class="v">門番・土壌・主力の3段構え</span></div>
+          <div class="row"><span class="k">価格</span><span class="v price">1,500〜2,500円</span></div>
+          <div class="row"><span class="k">役割</span><span class="v">型を証明する先発</span></div>
+        </div>
+        <div class="recipe r2">
+          <div class="tier">② 成長・高単価ライン</div>
+          <h3>睡眠・ストレスケア</h3>
+          <div class="combo">ガセリ菌CP2305系 ＋ ロイテリ菌 ＋ GABA/L-テアニン</div>
+          <div class="row"><span class="k">訴求</span><span class="v">腸脳相関・ストレスで菌が減る</span></div>
+          <div class="row"><span class="k">価格</span><span class="v price">2,500〜3,500円</span></div>
+          <div class="row"><span class="k">役割</span><span class="v">機能性表示で高単価化</span></div>
+        </div>
+        <div class="recipe r3">
+          <div class="tier">③ クロスセル・上位ライン</div>
+          <h3>美容・体脂肪ケア</h3>
+          <div class="combo">ビフィズス菌 ＋ 乳酸菌 ＋ ラクトフェリン</div>
+          <div class="row"><span class="k">訴求</span><span class="v">体重・体脂肪（FANCL型）</span></div>
+          <div class="row"><span class="k">価格</span><span class="v price">2,760〜3,888円</span></div>
+          <div class="row"><span class="k">役割</span><span class="v">上位クロスセル</span></div>
+        </div>
+      </div>
+
+      <div class="phases" style="margin-top:22px">
+        <div class="phase">
+          <div class="when">今すぐ<small>明日から</small></div>
+          <ul>
+            <li>処方3案を確定。<b>①腸活ベーシックで型を証明 → ②③を上位ラインに追加</b>（菌トレ習慣が実証した松竹梅モデル）</li>
+            <li>「役割分担ストーリー」をブランド共通コンセプトに設定</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">30日以内<small>検証</small></div>
+          <ul>
+            <li>各菌株の<b>機能性表示食品の届出可否</b>（論文・先行事例）を確認。ガセリ菌CP2305は他社届出済み＝独自株の要否を精査</li>
+            <li>ロイテリ菌の<b>原料調達（BioGaia社ライセンス品か国内代替株か）と原価</b>を確認</li>
+            <li>菌トレ習慣HYPERの★1-2レビューを精読し、複合サプリで嫌われる点（味・粒・価格）を洗い出す</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">90日以内<small>方向性</small></div>
+          <ul>
+            <li>①を先行発売し、売上・レビューを見て②③の投入順を決定</li>
+            <li>腸活／睡眠／美容の<b>3ラインでシリーズ化</b>しクロスセルを設計</li>
+            <li>ポストバイオティクス動向を継続監視し処方アップデートの種に</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. リスク -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">08</span><h2>リスクと留意点</h2></div>
+      <div class="risks">
+        <div class="risk"><h4>薬機法・機能性表示制度</h4><p>「睡眠の質を高める」「体脂肪を減らす」等は<b>機能性表示食品の届出が前提</b>。届出なしの表現は不可。</p></div>
+        <div class="risk"><h4>ロイテリ菌の権利関係</h4><p>BioGaia社が特許・商標を保有するケースが多い。<b>ライセンス条件・独占契約の有無を要確認</b>。</p></div>
+        <div class="risk"><h4>市場規模の性質</h4><p>42.7億USD・CAGR6.38%はIMARC Group（民間調査）の推計で<b>強気予測になりやすい</b>。国内公表値との突合は要検証。</p></div>
+        <div class="risk"><h4>研究の扱い</h4><p>「ストレス→善玉菌減少」（Cell誌）は<b>メディア経由の伝聞</b>。一次論文は未確認＝「〜という報道がある」扱いが安全。</p></div>
+        <div class="risk"><h4>訴求の説明コスト</h4><p>「役割分担ストーリー」は説明コストが高い。<b>LP・パッケージの図解</b>が成否を分ける。</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="qa-banner">
+      <span class="badge">QA Gate: PASS</span>
+      <span>網羅性 82 ／ 信頼性 76 ／ 実用性 88</span>
+      <span style="color:var(--ink-faint)">※市場規模の一部数値・ストレス研究は「メディア経由の伝聞」と明記</span>
+    </div>
+    <p style="margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700">主な出典</p>
+    <ul class="src-list">
+      <li>IMARC Group 日本プロバイオティクス市場 <a href="https://www.imarcgroup.com/japan-probiotics-market">imarcgroup.com/japan-probiotics-market</a></li>
+      <li>富士経済「腸活関連市場の最新トレンドと将来展望」 <a href="https://www.fuji-keizai.co.jp/report/detail.html?code=162211931&la=ja&la=en">fuji-keizai.co.jp/report/detail.html?code=162211931</a></li>
+      <li>マイベスト 乳酸菌／プロバイオティクスサプリ <a href="https://my-best.com/936">my-best.com/936</a>, <a href="https://my-best.com/15479">my-best.com/15479</a></li>
+      <li>アサヒ ディアナチュラGOLD 乳酸菌CP2305 <a href="https://www.dear-natura.com/product/detail/lab-gold">dear-natura.com/product/detail/lab-gold</a></li>
+      <li>バイオガイアジャパン「ロイテリ菌について」 <a href="https://www.biogaia.jp/reuteri">biogaia.jp/reuteri</a></li>
+      <li>Amazon 菌トレ習慣HYPER（★3.9・537件） <a href="https://www.amazon.co.jp/dp/B096BHH987">amazon.co.jp/dp/B096BHH987</a></li>
+      <li>食品OEMの窓口「2026年 健康食品OEMトレンド」 <a href="https://foodoem.jp/foodoem/health-oem-trends/">foodoem.jp/foodoem/health-oem-trends</a></li>
+    </ul>
+  </div>
+</footer>

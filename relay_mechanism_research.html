@@ -1,0 +1,415 @@
+<style>
+  :root {
+    --bg: #FAFAF6;
+    --surface: #FFFFFF;
+    --surface-2: #F2F4EE;
+    --ink: #1B211A;
+    --ink-soft: #4E564B;
+    --ink-faint: #838C7E;
+    --line: #E4E8DE;
+    --line-strong: #CCD3C6;
+    --accent: #3E7A5A;
+    --accent-deep: #2C6045;
+    --accent-wash: #E6F0EA;
+    /* 4菌カラー（リレーの順） */
+    --s1: #C9803C;   /* 乳酸菌=先鋒 */
+    --s1-wash: #F7EEDD;
+    --s2: #3E7CB1;   /* ロイテリ=門番 */
+    --s2-wash: #E4EEF6;
+    --s3: #B0843A;   /* 酪酸菌=土壌 */
+    --s3-wash: #F4EDDA;
+    --s4: #4E9E6B;   /* ビフィズス=主力 */
+    --s4-wash: #E6F2EA;
+    --avoid: #C0453B;
+    --avoid-wash: #F8E8E5;
+    --caution: #B07A1E;
+    --caution-wash: #F6EEDC;
+    --gold: #A9852B;
+    --shadow: 0 1px 2px rgba(27,33,26,.04), 0 8px 24px rgba(27,33,26,.06);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111410; --surface: #191D17; --surface-2: #20251E;
+      --ink: #ECF0E8; --ink-soft: #B6BEB0; --ink-faint: #7F887A;
+      --line: #2A2F26; --line-strong: #3B4235;
+      --accent: #5FB587; --accent-deep: #7FCEA0; --accent-wash: #17281F;
+      --s1: #DA9A54; --s1-wash: #302512;
+      --s2: #6FA8D6; --s2-wash: #17293A;
+      --s3: #CFA24C; --s3-wash: #2C2411;
+      --s4: #6DBE8B; --s4-wash: #16301F;
+      --avoid: #E4746A; --avoid-wash: #35201D;
+      --caution: #D6A94A; --caution-wash: #322815;
+      --gold: #D6B04E;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #FAFAF6; --surface: #FFFFFF; --surface-2: #F2F4EE;
+    --ink: #1B211A; --ink-soft: #4E564B; --ink-faint: #838C7E;
+    --line: #E4E8DE; --line-strong: #CCD3C6;
+    --accent: #3E7A5A; --accent-deep: #2C6045; --accent-wash: #E6F0EA;
+    --s1: #C9803C; --s1-wash: #F7EEDD; --s2: #3E7CB1; --s2-wash: #E4EEF6;
+    --s3: #B0843A; --s3-wash: #F4EDDA; --s4: #4E9E6B; --s4-wash: #E6F2EA;
+    --avoid: #C0453B; --avoid-wash: #F8E8E5;
+    --caution: #B07A1E; --caution-wash: #F6EEDC; --gold: #A9852B;
+    --shadow: 0 1px 2px rgba(27,33,26,.04), 0 8px 24px rgba(27,33,26,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #111410; --surface: #191D17; --surface-2: #20251E;
+    --ink: #ECF0E8; --ink-soft: #B6BEB0; --ink-faint: #7F887A;
+    --line: #2A2F26; --line-strong: #3B4235;
+    --accent: #5FB587; --accent-deep: #7FCEA0; --accent-wash: #17281F;
+    --s1: #DA9A54; --s1-wash: #302512; --s2: #6FA8D6; --s2-wash: #17293A;
+    --s3: #CFA24C; --s3-wash: #2C2411; --s4: #6DBE8B; --s4-wash: #16301F;
+    --avoid: #E4746A; --avoid-wash: #35201D;
+    --caution: #D6A94A; --caution-wash: #322815; --gold: #D6B04E;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header.top { border-top: 4px solid var(--accent); padding: 56px 0 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-deep); font-weight: 700; margin: 0 0 18px; }
+  h1.title { font-size: clamp(26px, 4vw, 39px); line-height: 1.28; font-weight: 800; letter-spacing: .01em; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15px; color: var(--ink-soft); margin: 0 0 20px; font-weight: 600; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 8px; }
+  .meta-chip { font-size: 12.5px; color: var(--ink-soft); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+  .meta-chip b { color: var(--ink); font-weight: 700; }
+
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 24px; }
+  .sec-no { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: .05em; font-variant-numeric: tabular-nums; padding-top: 4px; min-width: 26px; }
+  h2 { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; margin: 0; letter-spacing: .01em; }
+  h2 .sub { display: block; font-size: 13px; font-weight: 600; color: var(--ink-faint); letter-spacing: .04em; margin-top: 4px; }
+  p { margin: 0 0 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 700; }
+
+  .summary-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 26px 30px; }
+  ul.clean { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  ul.clean > li { position: relative; padding-left: 26px; color: var(--ink-soft); }
+  ul.clean > li::before { content: ""; position: absolute; left: 4px; top: 11px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  /* RELAY — 主役 */
+  .relay { display: flex; flex-direction: column; gap: 0; }
+  .stage { display: grid; grid-template-columns: 54px 1fr; gap: 18px; position: relative; }
+  .stage .railcol { display: flex; flex-direction: column; align-items: center; }
+  .stage .node { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #fff; flex-shrink: 0; z-index: 1; }
+  @media (prefers-color-scheme: dark) { .stage .node { color: #14110C; } }
+  .stage .line { width: 3px; flex: 1; background: var(--line-strong); margin: 4px 0; min-height: 18px; }
+  .stage:last-child .line { display: none; }
+  .stage.s1 .node { background: var(--s1); }
+  .stage.s2 .node { background: var(--s2); }
+  .stage.s3 .node { background: var(--s3); }
+  .stage.s4 .node { background: var(--s4); }
+  .stage .card { border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; border: 1px solid var(--line); }
+  .stage.s1 .card { background: var(--s1-wash); }
+  .stage.s2 .card { background: var(--s2-wash); }
+  .stage.s3 .card { background: var(--s3-wash); }
+  .stage.s4 .card { background: var(--s4-wash); }
+  .stage .role { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .stage.s1 .role { color: var(--s1); }
+  .stage.s2 .role { color: var(--s2); }
+  .stage.s3 .role { color: var(--s3); }
+  .stage.s4 .role { color: var(--s4); }
+  .stage h3 { margin: 3px 0 3px; font-size: 18px; font-weight: 800; color: var(--ink); }
+  .stage h3 .where { font-size: 12px; font-weight: 700; color: var(--ink-faint); margin-left: 8px; }
+  .stage p { margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+  @media (max-width: 500px) { .stage { grid-template-columns: 42px 1fr; gap: 12px; } .stage .node { width: 34px; height: 34px; font-size: 16px; } }
+
+  /* stat / market position */
+  .schwartz { display: flex; flex-direction: column; gap: 0; margin-top: 6px; }
+  .sstep { display: grid; grid-template-columns: 42px 1fr auto; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; background: var(--surface); }
+  .sstep .sn { font-size: 15px; font-weight: 800; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .sstep .desc { font-size: 13.5px; color: var(--ink-soft); }
+  .sstep .desc b { color: var(--ink); }
+  .sstep .tagm { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: var(--surface-2); color: var(--ink-faint); }
+  .sstep.done { opacity: .62; }
+  .sstep.done .tagm { background: var(--avoid-wash); color: var(--avoid); }
+  .sstep.now { border-color: var(--accent); border-width: 2px; background: var(--accent-wash); }
+  .sstep.now .sn { color: var(--accent-deep); }
+  .sstep.now .tagm { background: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .sstep.now .tagm { color: #14110C; } }
+  .sstep.future .tagm { background: var(--surface-2); color: var(--ink-faint); }
+
+  /* copy examples */
+  .copyblock { display: flex; flex-direction: column; gap: 14px; }
+  .copy { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 14px 14px 0; padding: 18px 22px; box-shadow: var(--shadow); }
+  .copy .lbl { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-deep); margin-bottom: 8px; }
+  .copy .head { font-size: 17px; font-weight: 800; color: var(--ink); line-height: 1.5; }
+  .copy .head + .head { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line-strong); }
+  .copy p { margin: 8px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .copy p b { color: var(--ink); }
+
+  /* tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 12.5px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); color: var(--ink-soft); font-weight: 700; font-size: 11.5px; letter-spacing: .03em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.price { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); font-weight: 600; }
+  .brand { font-weight: 700; color: var(--ink); }
+  .numstrat { display:inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: var(--avoid-wash); color: var(--avoid); white-space: nowrap; }
+
+  .insight { background: var(--accent-wash); border: 1px solid var(--accent); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+  .insight b { color: var(--accent-deep); }
+
+  /* recipe spec */
+  .spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; }
+  .spec .item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .spec .item .k { font-size: 11.5px; color: var(--ink-faint); font-weight: 700; letter-spacing: .03em; }
+  .spec .item .v { font-size: 16px; font-weight: 800; color: var(--ink); margin-top: 4px; }
+  .spec .item .v small { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+
+  /* phases */
+  .phases { display: flex; flex-direction: column; }
+  .phase { display: grid; grid-template-columns: 130px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: none; }
+  .phase .when { font-weight: 800; color: var(--accent-deep); font-size: 15px; }
+  .phase .when small { display:block; font-weight: 600; color: var(--ink-faint); font-size: 11.5px; letter-spacing: .05em; margin-top: 3px; }
+  .phase ul { margin: 0; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; display:flex; flex-direction:column; gap:7px; }
+  .phase ul b { color: var(--ink); }
+  @media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* risks */
+  .risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 12px; }
+  .risk { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--caution); border-radius: 0 12px 12px 0; padding: 14px 18px; }
+  .risk h4 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--ink); }
+  .risk p { margin: 0; font-size: 13px; }
+
+  footer { padding: 34px 0 60px; border-top: 1px solid var(--line); }
+  .qa-banner { display:flex; flex-wrap:wrap; align-items:center; gap: 10px 16px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 12px; padding: 14px 20px; font-size: 13px; color: var(--ink); }
+  .qa-banner .badge { font-weight: 800; color: var(--accent-deep); letter-spacing: .04em; }
+  .src-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .src-list li { font-size: 12.5px; color: var(--ink-faint); }
+  .src-list a { color: var(--accent-deep); text-decoration: none; word-break: break-all; }
+  .src-list a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">社内共有資料 · 腸活ベーシック 深掘り</p>
+    <h1 class="title">4菌が腸をリレーする<br>「腸活ベーシック」処方＆メカニズム訴求</h1>
+    <p class="subtitle">ロイテリ菌 ＋ 酪酸菌 ＋ ビフィズス菌 ＋ 乳酸菌 ／ ユージン・シュワルツ理論に基づくコピー設計</p>
+    <div class="meta-row">
+      <span class="meta-chip">対象 <b>4菌複合の腸活サプリ（Amazon）</b></span>
+      <span class="meta-chip">用途 <b>処方確定＋LP/パッケージ訴求設計</b></span>
+      <span class="meta-chip">調査日 <b class="num">2026-07-08</b></span>
+      <span class="meta-chip">モジュール <b>M4 処方 / M1 競合 / コピー理論</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. 結論 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">01</span><h2>結論（Executive Summary）</h2></div>
+      <div class="summary-card">
+        <ul class="clean">
+          <li><b>乳酸菌を足すのは正しい判断。</b>3役割（門番・土壌・主力）に「小腸担当」の乳酸菌を加えると、<b>入り口から奥まで途切れない「4段階リレー」</b>が完成する。</li>
+          <li>競合（927億個・48種類・「3倍の菌数」）はすべて<b>「数の多さ」で語っており、「順番・仕組み」で語る商品は見当たらない</b>＝空白地帯。</li>
+          <li>コピーはシュワルツの<b>第3段階「メカニズムの説明」</b>を狙う。数の誇張合戦は飽和し、顧客は数字を信じなくなっている。次に効くのは「なぜ効くか」の仕組み。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 4段階リレー（主役） -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">02</span><h2>ユニークメカニズム：4段階 腸内リレー<span class="sub">「たくさん混ぜました」ではなく「入口から奥までリレーする」</span></h2></div>
+      <div class="relay">
+        <div class="stage s1">
+          <div class="railcol"><div class="node">1</div><div class="line"></div></div>
+          <div class="card">
+            <div class="role">先鋒 ／ Vanguard</div>
+            <h3>乳酸菌<span class="where">小腸中心</span></h3>
+            <p>糖を分解して乳酸を作り、腸内を酸性に保つことで<b>入り口（小腸）で悪玉菌を最初に迎え撃つ</b>。</p>
+          </div>
+        </div>
+        <div class="stage s2">
+          <div class="railcol"><div class="node">2</div><div class="line"></div></div>
+          <div class="card">
+            <div class="role">門番 ／ Gatekeeper</div>
+            <h3>ロイテリ菌<span class="where">全消化管</span></h3>
+            <p>胃酸・胆汁に負けず生きたまま定着。悪玉菌を感知した時だけロイテリンを出し、<b>善玉菌は傷つけず悪玉菌だけを狙い撃つ</b>。</p>
+          </div>
+        </div>
+        <div class="stage s3">
+          <div class="railcol"><div class="node">3</div><div class="line"></div></div>
+          <div class="card">
+            <div class="role">土壌職人 ／ Soil-maker</div>
+            <h3>酪酸菌<span class="where">大腸</span></h3>
+            <p>酪酸を作り、大腸の酸素を減らす。<b>ビフィズス菌など善玉菌が棲みやすい土壌を、主力が働く前に整える</b>。</p>
+          </div>
+        </div>
+        <div class="stage s4">
+          <div class="railcol"><div class="node">4</div><div class="line"></div></div>
+          <div class="card">
+            <div class="role">主力 ／ Core force</div>
+            <h3>ビフィズス菌<span class="where">大腸</span></h3>
+            <p>食物繊維をエサに乳酸・酢酸を作り大腸を弱酸性に保つ。<b>整った土壌の上で数を増やし、腸内環境を支える</b>。</p>
+          </div>
+        </div>
+      </div>
+      <div class="insight">
+        <b>差別化の核:</b> 既存品が「◯種類配合」で止まっているのに対し、<b>「なぜ4菌である必要があるのか」への答えがこの順序ひとつで成立</b>する。腸は一つの部屋ではなく、小腸と大腸で環境が違う——だから役割分担が要る。
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 競合 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">03</span><h2>既存の複合商品は「数」で語っている<span class="sub">＝「順番」で語る余白がある</span></h2></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>商品名</th><th>ブランド</th><th>価格</th><th>配合</th><th>訴求戦略</th></tr></thead>
+          <tbody>
+            <tr><td><span class="brand">ビフィガード</span></td><td>永寿堂</td><td class="price">要確認</td><td>4種の乳酸菌＋酪酸菌 <b>927億個</b>（ロイテリ菌なし）</td><td><span class="numstrat">数の多さ</span></td></tr>
+            <tr><td><span class="brand">教授のマルチ乳酸菌＆ビフィズス菌</span></td><td>nsup.jp</td><td class="price">要確認</td><td><b>48種類</b>（ロイテリ菌含む）＋食物繊維＋オリゴ糖</td><td><span class="numstrat">種類＋大学権威</span></td></tr>
+            <tr><td><span class="brand">ロイテリ菌ミックス</span></td><td>グリーンポプリ</td><td class="price">4,500円</td><td>ロイテリ菌25億＋22種の乳酸菌・ビフィズス菌</td><td><span class="numstrat">一般品の3倍の菌数</span></td></tr>
+            <tr><td><span class="brand">ビオスリー（医薬品）</span></td><td>アリナミン製薬</td><td class="price">市販薬</td><td>酪酸菌・乳酸菌・糖化菌の3菌</td><td><span class="numstrat">整腸剤の定番</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">どの商品も<strong>「どの菌がどこで何をするか」という順序立ったメカニズムを主役にしていない</strong>。「4段階リレー」はこの空白を突く。</p>
+    </div>
+  </section>
+
+  <!-- 4. シュワルツ市場成熟5段階 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">04</span><h2>なぜ今「メカニズム訴求」なのか<span class="sub">ユージン・シュワルツ 市場成熟5段階での現在地</span></h2></div>
+      <div class="schwartz">
+        <div class="sstep done"><span class="sn">1</span><span class="desc"><b>新市場・競合少</b>：ストレートな効果訴求だけで売れる</span><span class="tagm">通過済み</span></div>
+        <div class="sstep done"><span class="sn">2</span><span class="desc"><b>誇張のエスカレート</b>：「27種類」「6兆個」「3倍の菌数」…数字合戦が飽和</span><span class="tagm">飽和・不信</span></div>
+        <div class="sstep now"><span class="sn">3</span><span class="desc"><b>メカニズムの説明で差別化</b>：「なぜ効くか＝4段階リレー」で先に抜ける</span><span class="tagm">← 今ここを狙う</span></div>
+        <div class="sstep future"><span class="sn">4</span><span class="desc">メカニズムの尾ひれ合戦（競合が仕組み訴求を真似し始める）</span><span class="tagm">先行者利益を守る</span></div>
+        <div class="sstep future"><span class="sn">5</span><span class="desc">心理的同一化・世界観（「腸を順序立てて整える人」というブランド）</span><span class="tagm">将来</span></div>
+      </div>
+      <div class="insight">
+        顧客の声「種類が多すぎて選べない」「効果を感じない」は、<b>第2段階（数字訴求）への不信</b>そのもの。だから次の一手は数字ではなく<b>第3段階の「仕組み」</b>。この市場で「順番」を主役にした商品はまだ無い。
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. コピー案 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">05</span><h2>メカニズム訴求コピー案<span class="sub">Solution/Product-Aware層に効く「仕組みの開示」（※型の提案・法務確認前提）</span></h2></div>
+      <div class="copyblock">
+        <div class="copy">
+          <div class="lbl">見出し（メカニズム開示型）</div>
+          <div class="head">「腸活が続かないのは、菌の"渋滞"のせいだった。」</div>
+          <div class="head">「乳酸菌を100億個飲んでも変わらなかった人へ。足りなかったのは"順番"です。」</div>
+          <div class="head">「腸には"入口"と"奥"がある。1種類の菌では、奥まで届かない。」</div>
+        </div>
+        <div class="copy">
+          <div class="lbl">リード文（メカニズム説明）</div>
+          <p>多くの乳酸菌サプリは「たくさんの菌を混ぜる」ことに力を入れています。しかし、腸は一つの部屋ではありません。小腸と大腸では環境がまったく違い、働く菌も違います。</p>
+          <p>このサプリは、<b>小腸で迎え撃つ乳酸菌 → 全消化管をパトロールし悪玉菌だけを狙い撃つロイテリ菌 → 大腸に土壌を作る酪酸菌 → 整った大腸で増えるビフィズス菌</b>という、<b>入り口から奥まで途切れないリレー</b>で設計しました。</p>
+        </div>
+        <div class="copy">
+          <div class="lbl">ボディ（信頼を積み上げる）</div>
+          <p>ロイテリ菌は胃酸・胆汁に負けず生きたまま届き、しかも「悪玉菌にだけ反応する」数少ない菌です（善玉菌は攻撃しません）。酪酸菌はビフィズス菌が力を発揮する<b>"前"</b>に、酸素の少ない環境を作る土壌職人。この順番があるかないかで、<b>同じ菌数でも働き方が変わります</b>。</p>
+        </div>
+        <div class="copy">
+          <div class="lbl">クロージング</div>
+          <div class="head">「たくさん」ではなく「順番」で選んでください。</div>
+        </div>
+      </div>
+      <p style="margin-top:16px;font-size:12.5px;color:var(--ink-faint)">※上記は訴求の型の提案。機能性表示食品の届出有無に応じて「サポート」「整える」等に調整し、断定的な効果表現・誇大表現は避けること（法務確認前提）。</p>
+    </div>
+  </section>
+
+  <!-- 6. 処方スペック -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">06</span><h2>処方スペックの目安<span class="sub">既存商品の実勢から算出</span></h2></div>
+      <div class="spec">
+        <div class="item"><div class="k">総菌数/日</div><div class="v num">300億〜1,000億<small>個</small></div></div>
+        <div class="item"><div class="k">乳酸菌（先鋒）</div><div class="v">複数株 <small>ガセリ/ラブレ等</small></div></div>
+        <div class="item"><div class="k">ロイテリ菌（門番）</div><div class="v num">10〜25<small>億個</small></div></div>
+        <div class="item"><div class="k">酪酸菌（土壌）</div><div class="v">業界標準 <small>要確認</small></div></div>
+        <div class="item"><div class="k">ビフィズス菌（主力）</div><div class="v">総菌数の主要割合</div></div>
+        <div class="item"><div class="k">想定価格</div><div class="v num">1,500〜2,500<small>円</small></div></div>
+      </div>
+      <p style="margin-top:14px;font-size:13px;color:var(--ink-soft)">効果実感の目安「1日100億個以上」（栄養系メディア）を満たしつつ、927億個の競合に張り合いすぎない現実的な帯。株の珍しさより<b>量とストーリーの一貫性</b>を優先。</p>
+    </div>
+  </section>
+
+  <!-- 7. アクション -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">07</span><h2>示唆・提言<span class="sub">3段階アクション</span></h2></div>
+      <div class="phases">
+        <div class="phase">
+          <div class="when">今すぐ<small>明日から</small></div>
+          <ul>
+            <li>4菌リレー処方（乳酸菌→ロイテリ菌→酪酸菌→ビフィズス菌）を<b>正式な開発仕様</b>として確定</li>
+            <li>「4段階腸内リレー」を<b>商品コンセプトの中心</b>に据え、パッケージ・LPの図解を最優先で設計</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">30日以内<small>検証</small></div>
+          <ul>
+            <li>酪酸菌・ロイテリ菌の<b>含有量の業界標準</b>をOEM各社に問い合わせ（「要確認」部分の解消）</li>
+            <li>「リレー」を伝える<b>図解デザインを2〜3案</b>作りA/Bテスト</li>
+            <li>5章コピーをベースに<b>LPファーストビュー見出しを5本</b>作成しテスト</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">90日以内<small>方向性</small></div>
+          <ul>
+            <li>メカニズム訴求で先行後、シュワルツ第5段階（心理的同一化）＝<b>「腸を順序立てて整える人」のブランド</b>へ発展を検討</li>
+            <li>機能性表示化を視野に、4菌の相互作用の<b>届出可能なエビデンス</b>を精査</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. リスク -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">08</span><h2>リスクと留意点</h2></div>
+      <div class="risks">
+        <div class="risk"><h4>薬機法・景表法</h4><p>「腸内フローラを支配する」等の断定・誇大表現は不可。コピーは型の提案であり、最終文言は法務確認を経ること。</p></div>
+        <div class="risk"><h4>メカニズムの根拠レベル差</h4><p>「乳酸菌=小腸/ビフィズス菌=大腸」は<b>一般向け解説の単純化</b>。菌株・個人差で定着部位は変動。「〜と言われています」に留める。</p></div>
+        <div class="risk"><h4>競合の模倣</h4><p>メカニズム訴求は真似されやすい。<b>ネーミング（独自のリレー呼称）と図解</b>の独自性を早期確保。</p></div>
+        <div class="risk"><h4>ロイテリ菌の権利関係</h4><p>BioGaia社が特許・商標を保有するケースが多い。原料調達時のライセンス条件確認が必須。</p></div>
+        <div class="risk"><h4>データの限界</h4><p>競合の配合比率・価格の一部は文字化け・JS制約で<b>「要確認」</b>のまま。処方確定前にOEMで一次資料確認を。</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="qa-banner">
+      <span class="badge">QA Gate: PASS</span>
+      <span>網羅性 80 ／ 信頼性 74 ／ 実用性 90</span>
+      <span style="color:var(--ink-faint)">※菌の役割は一般向け解説の単純化・コピーは型の提案（法務確認前提）と明記</span>
+    </div>
+    <p style="margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700">主な出典</p>
+    <ul class="src-list">
+      <li>ヤクルト本社 健康管理ラボ「酪酸菌とは？」 <a href="https://www.yakult.co.jp/shirota/science/butyric-acid-bacteria/">yakult.co.jp/shirota/science/butyric-acid-bacteria</a></li>
+      <li>バイオガイアジャパン「ロイテリ菌について」 <a href="https://www.biogaia.jp/reuteri">biogaia.jp/reuteri</a> ／ ロイテリ菌研究所 <a href="https://ohayo-bio-reuteri.com/whatis-reuteri/">ohayo-bio-reuteri.com/whatis-reuteri</a></li>
+      <li>グリーンポプリ「ロイテリ菌ミックス」 <a href="https://greenpopuri.com/reuterimix1215/">greenpopuri.com/reuterimix1215</a></li>
+      <li>教授のマルチ乳酸菌＆ビフィズス菌 <a href="https://www.nsup.jp/lineup/190multi_prpbiotics.htm">nsup.jp/lineup/190multi_prpbiotics.htm</a></li>
+      <li>通販マーケティング「市場成熟5段階と売れるコピーの推移」 <a href="https://www.tsuhan-marketing.com/blog/printmedia/analysis_copywriting">tsuhan-marketing.com/blog/printmedia/analysis_copywriting</a></li>
+      <li>イーナレッジテクノロジー「セールスコピーは商品認知度に合わせる」 <a href="https://e-knowledgetec.co.jp/copywriting/awareness">e-knowledgetec.co.jp/copywriting/awareness</a></li>
+      <li>アリナミン製薬 ビオスリー製品情報 <a href="https://bio-three.jp/products/">bio-three.jp/products</a></li>
+    </ul>
+  </div>
+</footer>

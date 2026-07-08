@@ -1,0 +1,422 @@
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --surface: #FFFFFF;
+    --surface-2: #F5F2EB;
+    --ink: #211D16;
+    --ink-soft: #58513F;
+    --ink-faint: #8B8271;
+    --line: #E9E3D6;
+    --line-strong: #D4CBB8;
+    --accent: #D98A2B;        /* ビタミンC=柑橘のオレンジ */
+    --accent-deep: #B26D14;
+    --accent-wash: #FBEFDD;
+    --dvit: #3E7CB1;          /* ビタミンD=陽光の青 */
+    --dvit-deep: #2C5F8C;
+    --dvit-wash: #E4EEF6;
+    --avoid: #C0453B;
+    --avoid-wash: #F8E8E5;
+    --caution: #B07A1E;
+    --caution-wash: #F6EEDC;
+    --opp: #4E9E6B;
+    --opp-wash: #E6F2EA;
+    --shadow: 0 1px 2px rgba(33,29,22,.04), 0 8px 24px rgba(33,29,22,.06);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14110C; --surface: #1C1811; --surface-2: #241F16;
+      --ink: #F1ECE1; --ink-soft: #C0B7A3; --ink-faint: #8A8170;
+      --line: #322B1F; --line-strong: #443B2B;
+      --accent: #E8A652; --accent-deep: #F0BC77; --accent-wash: #2E2413;
+      --dvit: #6FA8D6; --dvit-deep: #94C1E4; --dvit-wash: #17293A;
+      --avoid: #E4746A; --avoid-wash: #35201D;
+      --caution: #D6A94A; --caution-wash: #322815;
+      --opp: #6DBE8B; --opp-wash: #16301F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #FBFAF7; --surface: #FFFFFF; --surface-2: #F5F2EB;
+    --ink: #211D16; --ink-soft: #58513F; --ink-faint: #8B8271;
+    --line: #E9E3D6; --line-strong: #D4CBB8;
+    --accent: #D98A2B; --accent-deep: #B26D14; --accent-wash: #FBEFDD;
+    --dvit: #3E7CB1; --dvit-deep: #2C5F8C; --dvit-wash: #E4EEF6;
+    --avoid: #C0453B; --avoid-wash: #F8E8E5;
+    --caution: #B07A1E; --caution-wash: #F6EEDC;
+    --opp: #4E9E6B; --opp-wash: #E6F2EA;
+    --shadow: 0 1px 2px rgba(33,29,22,.04), 0 8px 24px rgba(33,29,22,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #14110C; --surface: #1C1811; --surface-2: #241F16;
+    --ink: #F1ECE1; --ink-soft: #C0B7A3; --ink-faint: #8A8170;
+    --line: #322B1F; --line-strong: #443B2B;
+    --accent: #E8A652; --accent-deep: #F0BC77; --accent-wash: #2E2413;
+    --dvit: #6FA8D6; --dvit-deep: #94C1E4; --dvit-wash: #17293A;
+    --avoid: #E4746A; --avoid-wash: #35201D;
+    --caution: #D6A94A; --caution-wash: #322815;
+    --opp: #6DBE8B; --opp-wash: #16301F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header.top { border-top: 4px solid var(--accent); padding: 56px 0 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-deep); font-weight: 700; margin: 0 0 18px; }
+  h1.title { font-size: clamp(27px, 4.2vw, 40px); line-height: 1.28; font-weight: 800; letter-spacing: .01em; margin: 0 0 20px; text-wrap: balance; }
+  h1.title .cvt { color: var(--accent-deep); }
+  h1.title .dvt { color: var(--dvit-deep); }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 8px; }
+  .meta-chip { font-size: 12.5px; color: var(--ink-soft); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+  .meta-chip b { color: var(--ink); font-weight: 700; }
+
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 24px; }
+  .sec-no { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: .05em; font-variant-numeric: tabular-nums; padding-top: 4px; min-width: 26px; }
+  h2 { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; margin: 0; letter-spacing: .01em; }
+  h2 .sub { display: block; font-size: 13px; font-weight: 600; color: var(--ink-faint); letter-spacing: .04em; margin-top: 4px; }
+  p { margin: 0 0 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 700; }
+
+  /* verdict banner */
+  .verdict {
+    background: linear-gradient(135deg, var(--accent-wash), var(--dvit-wash));
+    border: 1px solid var(--line-strong); border-radius: 18px; box-shadow: var(--shadow);
+    padding: 26px 30px; margin-bottom: 22px;
+  }
+  .verdict .kicker { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; color: var(--dvit-deep); margin: 0 0 8px; }
+  .verdict .headline { font-size: clamp(19px, 2.5vw, 25px); font-weight: 800; color: var(--ink); margin: 0; line-height: 1.4; }
+  .verdict .headline em { font-style: normal; color: var(--dvit-deep); border-bottom: 3px solid var(--dvit); }
+
+  ul.clean { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  ul.clean > li { position: relative; padding-left: 30px; color: var(--ink-soft); }
+  ul.clean > li .n { position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--dvit); color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+  @media (prefers-color-scheme: dark) { ul.clean > li .n { color: #14110C; } }
+
+  /* VS comparison */
+  .vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: stretch; }
+  .vs-col { background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); padding: 24px 24px 26px; }
+  .vs-col.c { border-radius: 16px 0 0 16px; border-right: none; }
+  .vs-col.d { border-radius: 0 16px 16px 0; border-left: none; }
+  .vs-mid { display: grid; place-items: center; width: 56px; background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .vs-mid span { font-size: 15px; font-weight: 800; color: var(--ink-faint); letter-spacing: .06em; }
+  .vs-col h3 { margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+  .vs-col.c h3 { color: var(--accent-deep); }
+  .vs-col.d h3 { color: var(--dvit-deep); }
+  .vs-col .verdict-pill { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .05em; padding: 4px 11px; border-radius: 999px; margin-bottom: 16px; }
+  .vs-col.c .verdict-pill { background: var(--avoid-wash); color: var(--avoid); }
+  .vs-col.d .verdict-pill { background: var(--opp-wash); color: var(--opp); }
+  .vs-col dl { margin: 0; display: flex; flex-direction: column; gap: 13px; }
+  .vs-col dt { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--ink-faint); text-transform: uppercase; }
+  .vs-col dd { margin: 3px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .vs-col dd b { color: var(--ink); }
+  @media (max-width: 620px) {
+    .vs-grid { grid-template-columns: 1fr; }
+    .vs-col.c { border-radius: 16px 16px 0 0; border-right: 1px solid var(--line); border-bottom: none; }
+    .vs-col.d { border-radius: 0 0 16px 16px; border-left: 1px solid var(--line); border-top: none; }
+    .vs-mid { width: auto; height: 42px; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  }
+
+  /* stat tiles */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 4px 0 20px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .stat .fig { font-size: 26px; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
+  .stat .fig small { font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+  .stat.d .fig { color: var(--dvit-deep); }
+  .stat .lbl { font-size: 12.5px; color: var(--ink-faint); margin-top: 4px; }
+  .stat .src { font-size: 11px; color: var(--ink-faint); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line-strong); }
+
+  /* tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); color: var(--ink-soft); font-weight: 700; font-size: 11.5px; letter-spacing: .03em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.d-row { background: var(--dvit-wash); }
+  td.conc { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; color: var(--accent-deep); }
+  td.price { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); }
+  .dchip { display:inline-block; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .dchip.yes { background: var(--dvit-wash); color: var(--dvit-deep); border: 1px solid var(--dvit); }
+  .dchip.no { background: var(--surface-2); color: var(--ink-faint); }
+  .brand { font-weight: 700; color: var(--ink); }
+  .legend { margin-top: 12px; font-size: 12.5px; color: var(--ink-faint); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
+  /* market bars */
+  .marketnote { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-top: 4px; }
+  .rankbar { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 7px 0; font-size: 13.5px; }
+  .rankbar .r { font-weight: 800; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .rankbar .nm { color: var(--ink-soft); }
+  .rankbar .nm b { color: var(--ink); }
+  .rankbar .pr { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .rankbar.lipo { background: var(--accent-wash); border-radius: 8px; padding: 7px 10px; }
+  .rankbar.lipo .r { color: var(--accent-deep); }
+
+  /* voice */
+  .voice { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 12px; }
+  .voice blockquote { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px; font-size: 13.5px; color: var(--ink); }
+  .voice blockquote::before { content:"“"; font-size: 30px; color: var(--accent); line-height: 0; position: relative; top: 10px; margin-right: 4px; }
+  .insight { background: var(--dvit-wash); border: 1px solid var(--dvit); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+  .insight b { color: var(--dvit-deep); }
+
+  /* gaps */
+  .gap-list { display: flex; flex-direction: column; gap: 10px; }
+  .gap { display: grid; grid-template-columns: minmax(150px, 300px) 1fr; gap: 6px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+  .gap .g-need { font-weight: 700; color: var(--avoid); font-size: 13.5px; }
+  .gap .g-sol { color: var(--ink-soft); font-size: 13.5px; }
+  .gap .g-sol b { color: var(--ink); }
+  @media (max-width: 560px) { .gap { grid-template-columns: 1fr; } }
+
+  /* phases */
+  .phases { display: flex; flex-direction: column; }
+  .phase { display: grid; grid-template-columns: 130px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: none; }
+  .phase .when { font-weight: 800; color: var(--accent-deep); font-size: 15px; }
+  .phase .when small { display:block; font-weight: 600; color: var(--ink-faint); font-size: 11.5px; letter-spacing: .05em; margin-top: 3px; }
+  .phase ul { margin: 0; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; display:flex; flex-direction:column; gap:7px; }
+  .phase ul b { color: var(--ink); }
+  @media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* recipe card */
+  .recipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-top: 6px; }
+  .recipe .r-item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; text-align: center; }
+  .recipe .r-item .val { font-size: 24px; font-weight: 800; color: var(--accent-deep); }
+  .recipe .r-item.d .val { color: var(--dvit-deep); }
+  .recipe .r-item .k { font-size: 12px; color: var(--ink-faint); margin-top: 4px; letter-spacing: .04em; }
+
+  /* risks */
+  .risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 12px; }
+  .risk { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--caution); border-radius: 0 12px 12px 0; padding: 14px 18px; }
+  .risk h4 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--ink); }
+  .risk p { margin: 0; font-size: 13px; }
+
+  footer { padding: 34px 0 60px; border-top: 1px solid var(--line); }
+  .qa-banner { display:flex; flex-wrap:wrap; align-items:center; gap: 10px 16px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 12px; padding: 14px 20px; font-size: 13px; color: var(--ink); }
+  .qa-banner .badge { font-weight: 800; color: var(--opp); letter-spacing: .04em; }
+  .src-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .src-list li { font-size: 12.5px; color: var(--ink-faint); }
+  .src-list a { color: var(--accent-deep); text-decoration: none; word-break: break-all; }
+  .src-list a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">社内共有資料 · 処方判断リサーチ</p>
+    <h1 class="title">リポソーム<span class="cvt">ビタミンC</span> 単体 <span style="color:var(--ink-faint);font-weight:600">vs</span> <span class="cvt">C</span>＋<span class="dvt">D</span>配合<br>Amazonでどっちが売りやすいか</h1>
+    <div class="meta-row">
+      <span class="meta-chip">対象 <b>リポソームビタミンC（日本市場・Amazon中心）</b></span>
+      <span class="meta-chip">用途 <b>新商品の処方決定</b></span>
+      <span class="meta-chip">調査日 <b class="num">2026-07-08</b></span>
+      <span class="meta-chip">モジュール <b>M4 売れ筋 / M1 競合</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. 結論 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">01</span><h2>結論（Executive Summary）</h2></div>
+      <div class="verdict">
+        <p class="kicker">Verdict</p>
+        <p class="headline">新規参入なら <em>「リポソームC＋D配合」</em> の方が売りやすい。<br>ただし実売データ未確認の仮説段階。</p>
+      </div>
+      <ul class="clean">
+        <li><span class="n">1</span><b>単体Cは激戦区で飽和気味。</b>Amazonで確認できるだけで10ブランド以上（Lypo-C・Yunth・Obagi・LivOn等）がひしめき、価格・濃度・味の差別化が出尽くしている。</li>
+        <li><span class="n">2</span><b>C＋D配合はまだ商品数が少ない</b>（確認できたのは Lypo-C C+D／CV-X／d-supple の3例のみ）＝ニッチだが空いている。</li>
+        <li><span class="n">3</span><b>ビタミンD不足という強い社会的ニーズが後押し。</b>日本人の約8〜9割が不足という報道があり、「日光を浴びない生活」への不安に直接刺さる。「1本で美容C＋骨・免疫のD」は高価格を正当化しやすい。</li>
+      </ul>
+      <div class="insight" style="margin-top:20px">
+        <b>最も手堅い型:</b> いきなり複雑なC+Dで入るとレビュー資産のない新規は伝わりにくい。<b>単体Cで型を証明 → 上位ラインとしてC+Dを追加</b>する2段構えが安全（Lypo-C自身がこの順で展開）。
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. VS -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">02</span><h2>単体C vs C＋D 直接比較<span class="sub">4つの軸で勝ち負けを判定</span></h2></div>
+      <div class="vs-grid">
+        <div class="vs-col c">
+          <h3>リポソームC 単体</h3>
+          <span class="verdict-pill">レッドオーシャン</span>
+          <dl>
+            <div><dt>競合数</dt><dd><b>10ブランド以上</b>（Lypo-C, Yunth, Obagi, LivOn ほか）＝飽和気味</dd></div>
+            <div><dt>追い風</dt><dd>美容ニーズは安定。ただし新規の切り口が乏しい</dd></div>
+            <div><dt>価格の納得感</dt><dd>「高いのに理由が薄い」という不満が口コミに多い</dd></div>
+            <div><dt>参入リスク</dt><dd>差別化しづらく価格競争に巻き込まれやすい</dd></div>
+          </dl>
+        </div>
+        <div class="vs-mid"><span>VS</span></div>
+        <div class="vs-col d">
+          <h3>リポソーム C＋D</h3>
+          <span class="verdict-pill">ブルーオーシャン気味</span>
+          <dl>
+            <div><dt>競合数</dt><dd><b>3ブランドのみ確認</b>（Lypo-C C+D／CV-X／d-supple）＝空いている</dd></div>
+            <div><dt>追い風</dt><dd>日本人の約8〜9割がD不足の報道。美容C層＝室内派とほぼ重なる</dd></div>
+            <div><dt>価格の納得感</dt><dd><b>「2つのサプリ代が1本に」</b>で高価格を正当化できる</dd></div>
+            <div><dt>参入リスク</dt><dd>訴求が複雑で新ブランドは伝わりにくい／実売データ未確認</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Amazon市場構図 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">03</span><h2>AmazonビタミンC市場の構図<span class="sub">売れ筋トップは非リポソームの大手。リポソームはプレミアムニッチ</span></h2></div>
+      <div class="marketnote">
+        <p style="margin:0 0 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700">Amazon ビタミンCサプリ 売れ筋（マイベスト集計）</p>
+        <div class="rankbar"><span class="r">1</span><span class="nm"><b>Dear-Natura Style ビタミンC MIX</b>（アサヒ）1050mg・非リポソーム</span><span class="pr">465円</span></div>
+        <div class="rankbar"><span class="r">2</span><span class="nm"><b>UHAグミサプリ ビタミンC</b>（味覚糖）500mg・非リポソーム</span><span class="pr">597円</span></div>
+        <div class="rankbar"><span class="r">3</span><span class="nm"><b>DHC ビタミンC ハードカプセル</b> 1000mg・非リポソーム</span><span class="pr">297円</span></div>
+        <div class="rankbar lipo"><span class="r">9</span><span class="nm"><b>ザリポ ビタミンCディープカプセル</b>（ロート製薬）500mg・<b style="color:var(--accent-deep)">リポソーム</b></span><span class="pr">2,648円</span></div>
+      </div>
+      <p style="margin-top:16px"><strong>読み取れること:</strong> 売れ筋マスは <span class="num">1日8〜20円</span> の非リポソーム大手が独占。リポソームは上位でも9位で <span class="num">1日60〜270円</span> と一桁高い<strong>プレミアムニッチ</strong>。この層の客は「安さ」ではなく<strong>吸収率・体感・美容効果</strong>を買っている。大手ロート製薬が「ザリポ」で参入している事実は、市場が本気で獲りにいく規模に育った裏付け。</p>
+    </div>
+  </section>
+
+  <!-- 4. 濃度・処方比較表 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">04</span><h2>濃度・処方 比較表<span class="sub">売れているリポソームビタミンC（青行＝ビタミンD配合）</span></h2></div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>商品名</th><th>ブランド</th><th>C濃度</th><th>形状</th><th>価格目安</th><th>D配合</th><th>その他成分</th><th>訴求</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="brand">Lypo-C リポカプセル ビタミンC</span></td><td>スピック</td><td class="conc">1,000mg</td><td>液体</td><td class="price">2,999〜6,800円</td><td><span class="dchip no">なし</span></td><td>無添加</td><td>田中みな実愛用。cosme389件</td></tr>
+            <tr class="d-row"><td><span class="brand">Lypo-C リポカプセル ビタミンC＋D</span></td><td>スピック</td><td class="conc">1,000mg</td><td>液体</td><td class="price">要確認（同価格帯）</td><td><span class="dchip yes">D3 2000IU</span></td><td>レシチン</td><td>単体の上位ライン。室内派向け</td></tr>
+            <tr><td><span class="brand">ザリポ ビタミンCディープカプセル</span></td><td>ロート製薬</td><td class="conc">500mg</td><td>カプセル</td><td class="price">2,648円/30日</td><td><span class="dchip no">なし</span></td><td>ヒアルロン酸/B2</td><td>大手・2層設計。粒が大きい不満</td></tr>
+            <tr><td><span class="brand">ピュアビタC</span></td><td>PORE VITAC</td><td class="conc">500mg</td><td>小粒カプセル</td><td class="price">約59円/日</td><td><span class="dchip no">なし</span></td><td>5種のC</td><td>低価格・飲みやすさ</td></tr>
+            <tr><td><span class="brand">リポソーム生ビタミンC</span></td><td>Yunth</td><td class="conc">2,000mg</td><td>粉末</td><td class="price">要確認</td><td><span class="dchip no">なし</span></td><td>レモン風味</td><td>高濃度訴求の代表</td></tr>
+            <tr><td><span class="brand">パーフェクトシーケア</span></td><td>SOLIA</td><td class="conc">2,000mg</td><td>カプセル</td><td class="price">2,480円</td><td><span class="dchip no">なし</span></td><td>タイムリリース</td><td>高濃度×低価格</td></tr>
+            <tr><td><span class="brand">VITA CLEAR-C</span></td><td>aequalis</td><td class="conc">1,000mg/3粒</td><td>小粒カプセル</td><td class="price">要確認</td><td><span class="dchip no">なし</span></td><td>ヘスペリジン</td><td>持続放出</td></tr>
+            <tr><td><span class="brand">リポスフェリック ビタミンC</span></td><td>LivOn</td><td class="conc">1,000mg</td><td>ゲル状</td><td class="price">要確認</td><td><span class="dchip no">なし</span></td><td>—</td><td>海外20年の歴史で権威付け</td></tr>
+            <tr><td><span class="brand">Cインナーリポショット</span></td><td>Obagi</td><td class="conc">1,000mg</td><td>顆粒</td><td class="price">約270円/日</td><td><span class="dchip no">なし</span></td><td>GF風味</td><td>皮膚科系の信頼性</td></tr>
+            <tr><td><span class="brand">ナナカラット ビタミン7C</span></td><td>タマチャンショップ</td><td class="conc">1,300mg</td><td>粉末</td><td class="price">要確認</td><td><span class="dchip no">なし</span></td><td>7種のC・ゆず味</td><td>味の工夫で「まずい」解消</td></tr>
+            <tr class="d-row"><td><span class="brand">CV-X</span></td><td>日本機能性医学研究所</td><td class="conc">非公開</td><td>カプセル</td><td class="price">要確認</td><td><span class="dchip yes">あり</span></td><td>ビタミンA/亜鉛</td><td>医療監修系。C+D+複合</td></tr>
+            <tr class="d-row"><td><span class="brand">リポソームC+D（乳酸菌入り）</span></td><td>大日ヘルシーフーズ</td><td class="conc">1,000mg</td><td>チュアブル</td><td class="price">要確認</td><td><span class="dchip yes">あり</span></td><td>有胞子乳酸菌</td><td>チュアブル×D×乳酸菌の三重差別化</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="legend">
+        <span><span class="dchip yes">D配合</span> ＝ 全12商品中わずか3商品</span>
+        <span style="color:var(--ink-faint)">主流の濃度は <b class="num" style="color:var(--accent-deep)">1,000mg</b>／高濃度帯は2,000mg</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 顧客の声 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">05</span><h2>顧客の声<span class="sub">単体Cへの不満が、そのままC＋Dの伸びしろ</span></h2></div>
+      <div class="voice">
+        <blockquote>味が独特・まずい。変に甘くて後味が最悪</blockquote>
+        <blockquote>高いけどいい感じ…でも値段が悩ましい</blockquote>
+        <blockquote>カプセルが大きく硬くて飲みにくい（ザリポ）</blockquote>
+        <blockquote>飲んでも飲まなくても変化がない気がする</blockquote>
+        <blockquote>日焼け対策で紫外線を避けている（＝D不足層と重なる）</blockquote>
+        <blockquote>室内で過ごす時間が長い・季節の変わり目に弱い</blockquote>
+      </div>
+      <div class="insight">
+        <b>インサイト:</b> 美容目的でビタミンCを買う層（紫外線対策・室内派）と、ビタミンD不足層は<b>ほぼ同一人物</b>。単体Cの「高いのに理由が薄い」不満を、Dの追加で「1本二役」に変えられる。
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 機会仮説 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">06</span><h2>機会仮説と差別化ポイント</h2></div>
+      <div class="gap-list">
+        <div class="gap"><div class="g-need">単体C市場は成分・濃度で差がつきにくい（飽和）</div><div class="g-sol"><b>C＋Dで「もう一つの理由」を作り、価格競争から降りる</b></div></div>
+        <div class="gap"><div class="g-need">「日光を浴びない生活」への漠然とした不安</div><div class="g-sol">C＋Dを<b>「美容とD不足対策の一石二鳥」</b>として明確に言語化</div></div>
+        <div class="gap"><div class="g-need">味への不満（まずい・後味）</div><div class="g-sol">ナナカラット式の<b>フレーバー設計</b>をC＋Dにも組み込む</div></div>
+        <div class="gap"><div class="g-need">高価格への納得材料が不足</div><div class="g-sol"><b>「2つのサプリ代を1本で」</b>という正当化ロジックを訴求文に明記</div></div>
+        <div class="gap"><div class="g-need">カプセルサイズの不満（ザリポ）</div><div class="g-sol"><b>小粒 or 液体・粉末</b>を踏襲し飲みやすさで差をつける</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. アクション -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">07</span><h2>示唆・提言<span class="sub">3段階アクション</span></h2></div>
+
+      <p style="margin-bottom:10px"><strong>推奨処方（初期仕様）:</strong></p>
+      <div class="recipe">
+        <div class="r-item"><div class="val num">1,000<small style="font-size:14px">mg</small></div><div class="k">ビタミンC（市場主流の濃度）</div></div>
+        <div class="r-item d"><div class="val num">2,000<small style="font-size:14px">IU</small></div><div class="k">ビタミンD3（Lypo-C C+D水準）</div></div>
+        <div class="r-item"><div class="val" style="font-size:18px;padding-top:4px">同価格〜微増</div><div class="k">「Dが付いて同額」の得感</div></div>
+      </div>
+
+      <div class="phases" style="margin-top:20px">
+        <div class="phase">
+          <div class="when">今すぐ<small>明日から</small></div>
+          <ul>
+            <li>処方は<b>「C＋D」を軸</b>に開発。C=1,000mg／D3=2,000IU前後を初期仕様に</li>
+            <li>訴求案：<b>「紫外線対策で日光を避けるあなたへ。美容のCと不足しがちなDを1本で」</b></li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">30日以内<small>検証</small></div>
+          <ul>
+            <li>Lypo-C C+D／CV-X／d-supple の<b>Amazonレビュー件数・星を個別に確認</b>（今回は503で取得失敗＝要確認）。C+Dが本当に伸びているか裏取り</li>
+            <li>味の不満対策に<b>フレーバーテスト</b>（レモン／ゆず等）</li>
+            <li>価格を単体C（2,999〜6,800円）と同水準に設定し「同額でDが付く」得感を設計</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">90日以内<small>方向性</small></div>
+          <ul>
+            <li>C+D軸で立ち上げ後、需要が確認できたら<b>単体C版を廉価ラインとして追加</b>し2ライン展開でクロスセル</li>
+            <li>大手（ロート「ザリポ」）の値下げ・訴求強化を継続監視</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. リスク -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">08</span><h2>リスクと留意点</h2></div>
+      <div class="risks">
+        <div class="risk"><h4>薬機法</h4><p>「D不足を解消する」等の断定表現は不可。「サポート」「補給」に留める。</p></div>
+        <div class="risk"><h4>ビタミンD過剰摂取</h4><p>Dは脂溶性で過剰症リスク。マルチビタミン等との重複に関する注意書きが必要。</p></div>
+        <div class="risk" style="border-left-color:var(--avoid)"><h4>結論は仮説段階</h4><p>C+DのAmazon実売データ（レビュー数・星・順位）は<b>今回直接確認できず</b>。競合数・D不足報道・価格ロジックの間接根拠に基づく仮説。実売検証が必須。</p></div>
+        <div class="risk"><h4>公表値と推測の区別</h4><p>D不足「8〜9割」はクリニック系メディアの記述。厳密な公的統計（厚労省調査等）は未確認＝「〜という報道がある」扱いが安全。</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="qa-banner">
+      <span class="badge">QA Gate: PASS</span>
+      <span>網羅性 80 ／ 信頼性 78 ／ 実用性 85</span>
+      <span style="color:var(--ink-faint)">※C+D商品のAmazon実レビュー件数は取得制限で未確認（要検証）</span>
+    </div>
+    <p style="margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700">主な出典</p>
+    <ul class="src-list">
+      <li>あおぞらクリニック「日本人の98％が不足？ビタミンD」 <a href="https://asagaya-clinic.jp/2026/01/30/vitamin-d-deficiency-japan/">asagaya-clinic.jp/2026/01/30/vitamin-d-deficiency-japan</a></li>
+      <li>日本肥満症予防協会「ビタミンDは女性の健康のために必要」 <a href="https://himan.jp/news/2025/000976.html">himan.jp/news/2025/000976.html</a></li>
+      <li>EPARKくすりの窓口 ビタミンC売れ筋ランキング <a href="https://www.kusurinomadoguchi.com/column/articles/vitamin-c-ranking/">kusurinomadoguchi.com/column/articles/vitamin-c-ranking</a></li>
+      <li>bluebird02「リポソームビタミンCのおすすめ17選」 <a href="https://bluebird02.com/124">bluebird02.com/124</a></li>
+      <li>マイベスト ビタミンCサプリおすすめ <a href="https://my-best.com/5285">my-best.com/5285</a></li>
+      <li>Lypo-C 公式（単体C／C+D） <a href="https://www.amazon.co.jp/dp/B0DTHGD8RV">amazon.co.jp/dp/B0DTHGD8RV</a>, <a href="https://www.amazon.co.jp/dp/B0CHM9RY4Z">amazon.co.jp/dp/B0CHM9RY4Z</a></li>
+      <li>ロート製薬 THE LYPO（ザリポ）公式 <a href="https://www.shop.rohto.co.jp/category/supplement/thelypo/193622.html">shop.rohto.co.jp/category/supplement/thelypo</a></li>
+    </ul>
+  </div>
+</footer>
