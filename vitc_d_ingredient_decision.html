@@ -1,0 +1,412 @@
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --surface: #FFFFFF;
+    --surface-2: #F5F2EB;
+    --ink: #211D16;
+    --ink-soft: #58513F;
+    --ink-faint: #8B8271;
+    --line: #E9E3D6;
+    --line-strong: #D4CBB8;
+    --c: #D98A2B;        /* ビタミンC=柑橘オレンジ */
+    --c-deep: #B26D14;
+    --c-wash: #FBEFDD;
+    --d: #3E7CB1;         /* ビタミンD=陽光ブルー */
+    --d-deep: #2C5F8C;
+    --d-wash: #E4EEF6;
+    --hesp: #7C4DA0;      /* ヘスペリジン=柑橘フラボノイドの紫 */
+    --hesp-deep: #603A80;
+    --hesp-wash: #EEE6F5;
+    --avoid: #C0453B;
+    --avoid-wash: #F8E8E5;
+    --caution: #B07A1E;
+    --caution-wash: #F6EEDC;
+    --opp: #4E9E6B;
+    --opp-wash: #E6F2EA;
+    --shadow: 0 1px 2px rgba(33,29,22,.04), 0 8px 24px rgba(33,29,22,.06);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14110C; --surface: #1C1811; --surface-2: #241F16;
+      --ink: #F1ECE1; --ink-soft: #C0B7A3; --ink-faint: #8A8170;
+      --line: #322B1F; --line-strong: #443B2B;
+      --c: #E8A652; --c-deep: #F0BC77; --c-wash: #2E2413;
+      --d: #6FA8D6; --d-deep: #94C1E4; --d-wash: #17293A;
+      --hesp: #A97FCC; --hesp-deep: #C4A3E0; --hesp-wash: #241733;
+      --avoid: #E4746A; --avoid-wash: #35201D;
+      --caution: #D6A94A; --caution-wash: #322815;
+      --opp: #6DBE8B; --opp-wash: #16301F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #FBFAF7; --surface: #FFFFFF; --surface-2: #F5F2EB;
+    --ink: #211D16; --ink-soft: #58513F; --ink-faint: #8B8271;
+    --line: #E9E3D6; --line-strong: #D4CBB8;
+    --c: #D98A2B; --c-deep: #B26D14; --c-wash: #FBEFDD;
+    --d: #3E7CB1; --d-deep: #2C5F8C; --d-wash: #E4EEF6;
+    --hesp: #7C4DA0; --hesp-deep: #603A80; --hesp-wash: #EEE6F5;
+    --avoid: #C0453B; --avoid-wash: #F8E8E5;
+    --caution: #B07A1E; --caution-wash: #F6EEDC;
+    --opp: #4E9E6B; --opp-wash: #E6F2EA;
+    --shadow: 0 1px 2px rgba(33,29,22,.04), 0 8px 24px rgba(33,29,22,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #14110C; --surface: #1C1811; --surface-2: #241F16;
+    --ink: #F1ECE1; --ink-soft: #C0B7A3; --ink-faint: #8A8170;
+    --line: #322B1F; --line-strong: #443B2B;
+    --c: #E8A652; --c-deep: #F0BC77; --c-wash: #2E2413;
+    --d: #6FA8D6; --d-deep: #94C1E4; --d-wash: #17293A;
+    --hesp: #A97FCC; --hesp-deep: #C4A3E0; --hesp-wash: #241733;
+    --avoid: #E4746A; --avoid-wash: #35201D;
+    --caution: #D6A94A; --caution-wash: #322815;
+    --opp: #6DBE8B; --opp-wash: #16301F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header.top { border-top: 4px solid var(--c); padding: 56px 0 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--c-deep); font-weight: 700; margin: 0 0 18px; }
+  h1.title { font-size: clamp(26px, 4vw, 39px); line-height: 1.28; font-weight: 800; letter-spacing: .01em; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15px; color: var(--ink-soft); margin: 0 0 20px; font-weight: 600; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 8px; }
+  .meta-chip { font-size: 12.5px; color: var(--ink-soft); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+  .meta-chip b { color: var(--ink); font-weight: 700; }
+
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 24px; }
+  .sec-no { font-size: 13px; font-weight: 800; color: var(--c); letter-spacing: .05em; font-variant-numeric: tabular-nums; padding-top: 4px; min-width: 26px; }
+  h2 { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; margin: 0; letter-spacing: .01em; }
+  h2 .sub { display: block; font-size: 13px; font-weight: 600; color: var(--ink-faint); letter-spacing: .04em; margin-top: 4px; }
+  p { margin: 0 0 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 700; }
+
+  /* reframe banner */
+  .reframe { background: linear-gradient(135deg, var(--c-wash), var(--hesp-wash)); border: 1px solid var(--line-strong); border-radius: 18px; box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 22px; }
+  .reframe .k { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; color: var(--hesp-deep); margin: 0 0 8px; }
+  .reframe .txt { font-size: clamp(17px, 2.3vw, 22px); font-weight: 800; color: var(--ink); margin: 0; line-height: 1.45; }
+  .reframe .txt del { color: var(--ink-faint); text-decoration-color: var(--avoid); text-decoration-thickness: 2px; }
+  .reframe .txt em { font-style: normal; color: var(--hesp-deep); border-bottom: 3px solid var(--hesp); }
+
+  /* 3択 decision cards */
+  .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .choice { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px 20px 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .choice::before { content:""; position:absolute; top:0; left:0; right:0; height: 5px; }
+  .choice.no::before { background: var(--avoid); }
+  .choice.ok::before { background: var(--caution); }
+  .choice.rec::before { background: var(--opp); }
+  .choice .verdict { display:inline-flex; align-items:center; gap:6px; font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 4px 11px; border-radius: 999px; margin-bottom: 12px; align-self: flex-start; }
+  .choice.no .verdict { background: var(--avoid-wash); color: var(--avoid); }
+  .choice.ok .verdict { background: var(--caution-wash); color: var(--caution); }
+  .choice.rec .verdict { background: var(--opp-wash); color: var(--opp); }
+  .choice .cn { font-size: 11px; font-weight: 800; color: var(--ink-faint); letter-spacing: .08em; }
+  .choice h3 { margin: 3px 0 10px; font-size: 17px; font-weight: 800; }
+  .choice .why { font-size: 13px; color: var(--ink-soft); margin: 0; }
+  .choice .why b { color: var(--ink); }
+  @media (max-width: 700px) { .choices { grid-template-columns: 1fr; } }
+
+  /* 3幕物語（主役） */
+  .acts { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0; align-items: stretch; margin: 6px 0 4px; }
+  .act { border-radius: 16px; padding: 22px 20px; border: 1px solid var(--line); text-align: center; }
+  .act.a1 { background: var(--c-wash); }
+  .act.a2 { background: var(--d-wash); }
+  .act.a3 { background: var(--hesp-wash); }
+  .act .actno { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .act.a1 .actno { color: var(--c-deep); }
+  .act.a2 .actno { color: var(--d-deep); }
+  .act.a3 .actno { color: var(--hesp-deep); }
+  .act .verb { font-size: 20px; font-weight: 800; color: var(--ink); margin: 6px 0 8px; }
+  .act .who { display:inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+  .act.a1 .who { background: var(--surface); color: var(--c-deep); border: 1px solid var(--c); }
+  .act.a2 .who { background: var(--surface); color: var(--d-deep); border: 1px solid var(--d); }
+  .act.a3 .who { background: var(--surface); color: var(--hesp-deep); border: 1px solid var(--hesp); }
+  .act p { font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+  .arrow { display: grid; place-items: center; width: 34px; color: var(--ink-faint); font-size: 20px; font-weight: 800; }
+  @media (max-width: 680px) {
+    .acts { grid-template-columns: 1fr; gap: 8px; }
+    .arrow { width: auto; height: 26px; transform: rotate(90deg); }
+  }
+
+  /* fairy dust risk */
+  .risk-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 16px; }
+  .rstat { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--avoid); border-radius: 0 14px 14px 0; padding: 18px 20px; }
+  .rstat .fig { font-size: 27px; font-weight: 800; color: var(--avoid); }
+  .rstat .fig small { font-size: 14px; }
+  .rstat .lbl { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; }
+  .rstat .src { font-size: 11px; color: var(--ink-faint); margin-top: 6px; }
+  .risklist { display: flex; flex-direction: column; gap: 10px; }
+  .rl { display: grid; grid-template-columns: 28px 1fr; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .rl .n { font-size: 13px; font-weight: 800; color: var(--avoid); }
+  .rl .t { font-size: 13.5px; color: var(--ink-soft); }
+  .rl .t b { color: var(--ink); }
+
+  /* tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 12.5px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); color: var(--ink-soft); font-weight: 700; font-size: 11.5px; letter-spacing: .03em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.rec-row { background: var(--hesp-wash); }
+  .brand { font-weight: 700; color: var(--ink); }
+  .judge { display:inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .judge.rec { background: var(--opp-wash); color: var(--opp); }
+  .judge.next { background: var(--caution-wash); color: var(--caution); }
+  .judge.no { background: var(--avoid-wash); color: var(--avoid); }
+
+  .insight { background: var(--hesp-wash); border: 1px solid var(--hesp); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+  .insight b { color: var(--hesp-deep); }
+
+  /* spec */
+  .spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; }
+  .spec .item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .spec .item .k { font-size: 11.5px; color: var(--ink-faint); font-weight: 700; letter-spacing: .03em; }
+  .spec .item .v { font-size: 17px; font-weight: 800; color: var(--ink); margin-top: 4px; }
+  .spec .item .v small { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+
+  /* phases */
+  .phases { display: flex; flex-direction: column; }
+  .phase { display: grid; grid-template-columns: 130px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: none; }
+  .phase .when { font-weight: 800; color: var(--c-deep); font-size: 15px; }
+  .phase .when small { display:block; font-weight: 600; color: var(--ink-faint); font-size: 11.5px; letter-spacing: .05em; margin-top: 3px; }
+  .phase ul { margin: 0; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; display:flex; flex-direction:column; gap:7px; }
+  .phase ul b { color: var(--ink); }
+  @media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* risks */
+  .risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 12px; }
+  .risk { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--caution); border-radius: 0 12px 12px 0; padding: 14px 18px; }
+  .risk h4 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--ink); }
+  .risk p { margin: 0; font-size: 13px; }
+
+  footer { padding: 34px 0 60px; border-top: 1px solid var(--line); }
+  .qa-banner { display:flex; flex-wrap:wrap; align-items:center; gap: 10px 16px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 12px; padding: 14px 20px; font-size: 13px; color: var(--ink); }
+  .qa-banner .badge { font-weight: 800; color: var(--opp); letter-spacing: .04em; }
+  .src-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .src-list li { font-size: 12.5px; color: var(--ink-faint); }
+  .src-list a { color: var(--c-deep); text-decoration: none; word-break: break-all; }
+  .src-list a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; border-radius: 3px; }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">社内共有資料 · 処方の意思決定</p>
+    <h1 class="title">リポソームC＋D｜「2成分特化」か<br>「微添加で差別化」か</h1>
+    <p class="subtitle">追加するなら何か — 糖転移ヘスペリジンで物語を3幕に延長する</p>
+    <div class="meta-row">
+      <span class="meta-chip">対象 <b>リポソームC＋D の処方設計（Amazon）</b></span>
+      <span class="meta-chip">用途 <b>追加成分の要否判断</b></span>
+      <span class="meta-chip">調査日 <b class="num">2026-07-08</b></span>
+      <span class="meta-chip">モジュール <b>M4 処方 / M1 競合 / M3 顧客</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. 結論 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">01</span><h2>結論（Executive Summary）</h2></div>
+      <div class="reframe">
+        <p class="k">Reframe — 問いの組み替え</p>
+        <p class="txt"><del>シンプル vs 複合</del> ではなく、<br><em>「微添加」か「機能的な1成分追加」か</em> で考える。</p>
+      </div>
+      <div class="choices">
+        <div class="choice no">
+          <span class="verdict">✕ やらない</span>
+          <div class="cn">選択肢 A</div>
+          <h3>微添加（全部入り）</h3>
+          <p class="why">美容成分を少量ずつ多数。<b>競合が飽和・信頼性リスク・物語を希釈</b>。誠実なメカニズム路線と矛盾。</p>
+        </div>
+        <div class="choice ok">
+          <span class="verdict">△ 可（手堅い）</span>
+          <div class="cn">選択肢 B</div>
+          <h3>C＋D の2成分特化</h3>
+          <p class="why">物語が最も純粋で誠実。ただし<b>差別化の"あと一押し"が弱い</b>。廉価ラインとして有効。</p>
+        </div>
+        <div class="choice rec">
+          <span class="verdict">◎ 推奨</span>
+          <div class="cn">選択肢 C</div>
+          <h3>C＋D＋糖転移ヘスペリジン</h3>
+          <p class="why">物語を薄めず<b>"延長"できる唯一の追加</b>。「Cを長持ちさせる番人」で3幕構成が完成。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 3幕物語（主役） -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">02</span><h2>推奨処方の物語：3幕構成<span class="sub">追加するなら「物語を延長する1成分」だけ</span></h2></div>
+      <div class="acts">
+        <div class="act a1">
+          <div class="actno">第1幕</div>
+          <div class="verb">届ける</div>
+          <span class="who">リポソーム × C</span>
+          <p>胃酸に負けずCを高吸収で小腸へ（二層の"水の部屋"）</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="act a2">
+          <div class="actno">第2幕</div>
+          <div class="verb">棲み分ける</div>
+          <span class="who">油の壁 × D</span>
+          <p>同じ粒の油の壁に脂溶性のDを性質のまま格納（二層一体構造）</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="act a3">
+          <div class="actno">第3幕</div>
+          <div class="verb">長持ちさせる</div>
+          <span class="who">ヘスペリジン</span>
+          <p>届いたCの消耗を抑える＝Cの番人（糖転移型は水溶性）</p>
+        </div>
+      </div>
+      <div class="insight">
+        <b>ここが肝:</b> ヘスペリジンは糖転移型なら水溶性で「水の部屋」の話と矛盾しない。<b>ここにコラーゲン・プラセンタ・亜鉛…と足すと物語が"なんでも入り"に退化</b>し、競合の盛り合わせ品と同じになる。足すのは1つだけ。
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 競合の実態 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">03</span><h2>競合の複合品は「全部入り」が飽和<span class="sub">＝盛ること自体はもう差別化にならない</span></h2></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>商品</th><th>ブランド</th><th>追加成分</th><th>追加の性格</th></tr></thead>
+          <tbody>
+            <tr><td><span class="brand">リポソームC＆コラーゲン</span></td><td>マルマンH&B</td><td>コラーゲン1,000mg</td><td>美容me-too</td></tr>
+            <tr><td><span class="brand">ILUS ビタミンC</span></td><td>ILUS</td><td>C誘導体・ヘスペリジン ほか</td><td>誘導体寄せ集め</td></tr>
+            <tr><td><span class="brand">リポソームC 1200mg</span></td><td>Dr.Noble</td><td>ビタミンD・E・CoQ10</td><td>抗酸化"全部入り"</td></tr>
+            <tr><td><span class="brand">KITEN リポソームC</span></td><td>KITEN</td><td>バイオペリン・エラスチン・コラーゲン</td><td>吸収補助＋美容盛り</td></tr>
+            <tr><td><span class="brand">シェリーヌ</span></td><td>CHÉLINE</td><td>コラーゲン・プラセンタ</td><td>美容盛り合わせ</td></tr>
+            <tr class="rec-row"><td><span class="brand">VITA CLEAR-C</span></td><td>aequalis</td><td>ヘスペリジン（機能寄り）</td><td>数少ない良い例</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">「C＋美容成分の盛り合わせ」はすでに定番。<strong>C＋Dに絞って「二層一体構造」を主役にしたほうが、この列から抜け出せる。</strong></p>
+    </div>
+  </section>
+
+  <!-- 4. 微添加リスク -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">04</span><h2>なぜ「微添加」は逆効果か<span class="sub">フェアリーダストの3リスク</span></h2></div>
+      <div class="risk-stats">
+        <div class="rstat">
+          <div class="fig num">84<small>%</small></div>
+          <div class="lbl">表示成分の量が表示と異なった製品の割合</div>
+          <div class="src">日経・ナショジオが引用する分析（57製品）</div>
+        </div>
+        <div class="rstat">
+          <div class="fig num">40<small>%</small></div>
+          <div class="lbl">表示成分すら入っていなかった製品の割合</div>
+          <div class="src">同上</div>
+        </div>
+      </div>
+      <div class="risklist">
+        <div class="rl"><div class="n">1</div><div class="t"><b>信頼性リスク（最大）</b>：少量ずつ多成分を盛る処方は、この"当てにならないサプリ群"と同じに映る。誠実なメカニズム訴求を掲げるブランドが自ら信頼を毀損する。</div></div>
+        <div class="rl"><div class="n">2</div><div class="t"><b>物語の希釈</b>：「水の部屋にC、油の壁にD」の一点突破の物語が、成分が増えるほどボケる。結局"普通のサプリ"に戻る。</div></div>
+        <div class="rl"><div class="n">3</div><div class="t"><b>過剰摂取・相互作用</b>：亜鉛・鉄は吸収を競合し、脂溶性ビタミン（D・E）は蓄積性。少量でも総量管理を難しくする。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 候補成分 -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">05</span><h2>足すなら何か — 候補成分の比較<span class="sub">「量と意味を説明できる」1成分だけ</span></h2></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>候補</th><th>Cとの関係（メカニズム）</th><th>物語との相性</th><th>判定</th></tr></thead>
+          <tbody>
+            <tr class="rec-row"><td><span class="brand">糖転移ヘスペリジン</span></td><td>Cの<b>消耗を抑制</b>＋吸収促進。糖転移型は水溶性</td><td>◎ 「高吸収で届けたCを長持ちさせる」＝三幕目。水溶性で"水の部屋"と矛盾しない</td><td><span class="judge rec">推奨</span></td></tr>
+            <tr><td><span class="brand">ローズヒップ</span></td><td>バイオフラボノイドがCの酸化を防ぐ</td><td>○ 「Cを守る」は近いが"天然C源"の色が強く別軸</td><td><span class="judge next">次点</span></td></tr>
+            <tr><td><span class="brand">コラーゲン</span></td><td>Cがコラーゲン生成を助ける。体感に高用量必要</td><td>△ カプセル大型化・コスト増・美容me-tooで埋没</td><td><span class="judge no">不採用</span></td></tr>
+            <tr><td><span class="brand">亜鉛</span></td><td>コラーゲン生成の酵素に関与</td><td>△ 微量だとフェアリーダスト化・他ミネラルと競合</td><td><span class="judge no">不採用</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="spec" style="margin-top:18px">
+        <div class="item"><div class="k">ビタミンC（リポソーム）</div><div class="v num">1,000<small>mg</small></div></div>
+        <div class="item"><div class="k">ビタミンD3</div><div class="v num">約2,000<small>IU</small></div></div>
+        <div class="item"><div class="k">糖転移ヘスペリジン</div><div class="v">有効量 <small>要確認</small></div></div>
+        <div class="item"><div class="k">想定価格</div><div class="v">C＋D同水準〜微増</div></div>
+      </div>
+      <p style="margin-top:12px;font-size:12.5px;color:var(--ink-faint)">※ヘスペリジンは「微量ではなく、なぜこの量かを語れる量」にするのがフェアリーダスト回避の肝。</p>
+    </div>
+  </section>
+
+  <!-- 6. アクション -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">06</span><h2>示唆・提言<span class="sub">3段階アクション</span></h2></div>
+      <div class="phases">
+        <div class="phase">
+          <div class="when">今すぐ<small>明日から</small></div>
+          <ul>
+            <li>処方は<b>「C＋D＋糖転移ヘスペリジン」の3点特化に決定</b>（盛り合わせにしない）</li>
+            <li>二層一体構造の断面図に<b>ヘスペリジン＝守り（番人）</b>を1つだけ足した図解を設計</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">30日以内<small>検証</small></div>
+          <ul>
+            <li>糖転移ヘスペリジンの<b>有効配合量</b>を原料メーカーに確認（「微量ではない」量を確定）</li>
+            <li>案B（C＋Dのみ）と案C（＋ヘスペリジン）の<b>LP見出しをA/Bテスト</b></li>
+            <li>競合複合品の★1-2レビューで「成分が多いだけで実感なし」系の不満を裏取り</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="when">90日以内<small>方向性</small></div>
+          <ul>
+            <li>案Cで先行後、需要を見て<b>案B（廉価・シンプル版）を下位ライン</b>に置く2ライン展開も選択肢</li>
+            <li>ヘスペリジン以外の追加は<b>原則封印</b>し「盛らない」をブランドの姿勢に</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. リスク -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-no">07</span><h2>リスクと留意点</h2></div>
+      <div class="risks">
+        <div class="risk"><h4>薬機法・景表法</h4><p>「Cの消耗を抑える」等も断定表現は不可。「〜と報告されています」に留め、最終文言は法務確認を。</p></div>
+        <div class="risk"><h4>エビデンスの強度</h4><p>ヘスペリジンの消耗抑制・吸収促進は研究会・メーカー解説ベース。<b>査読論文の一次確認は未実施</b>。有効量も要確認。</p></div>
+        <div class="risk"><h4>一貫性</h4><p>「盛らない」を売りにする以上、後から成分を足すとブランドの筋が崩れる。追加判断は慎重に。</p></div>
+        <div class="risk"><h4>差別化の本体</h4><p>ヘスペリジンは既存成分。<b>差別化は成分でなく"3幕の物語設計"</b>。成分だけ真似されても物語ごとは難しい。</p></div>
+        <div class="risk"><h4>データの限界</h4><p>競合の配合量が有効量か微量かは非公開が多く、"全部入り＝フェアリーダスト"と断定はできない（見え方の議論）。</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="qa-banner">
+      <span class="badge">QA Gate: PASS</span>
+      <span>網羅性 82 ／ 信頼性 78 ／ 実用性 88</span>
+      <span style="color:var(--ink-faint)">※各成分の有効配合量は要確認・競合が実際にフェアリーダストかは非公開のため断定不可</span>
+    </div>
+    <p style="margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700">主な出典</p>
+    <ul class="src-list">
+      <li>ヘスペリジン研究会「ビタミンC消耗抑制作用」 <a href="http://www.ghes.jp/ghes/hesperidin/effects06/">ghes.jp/ghes/hesperidin/effects06</a></li>
+      <li>ヘルシーパス「糖転移ヘスペリジンとは」 <a href="https://www.healthy-pass.co.jp/qa/2371/">healthy-pass.co.jp/qa/2371</a></li>
+      <li>わかさの秘密「ヘスペリジン」 <a href="https://himitsu.wakasa.jp/contents/hesperidin/">himitsu.wakasa.jp/contents/hesperidin</a> ／「ローズヒップ」 <a href="https://himitsu.wakasa.jp/contents/rose-hip/">rose-hip</a></li>
+      <li>日本経済新聞「サプリを信じる前に知るべき5つのこと」 <a href="https://www.nikkei.com/article/DGXZQOUC1570K0V10C24A3000000/">nikkei.com/article/DGXZQOUC1570K0V10C24A3000000</a></li>
+      <li>マルマンH&B リポソームビタミンC＆コラーゲン <a href="https://maruman.co.jp/products/supplement/liposome_vc.html">maruman.co.jp/products/supplement/liposome_vc.html</a></li>
+      <li>FANCL CLIP「サプリって、何種類も摂って大丈夫なの？」 <a href="https://www.fancl.co.jp/clip/healthcare/supplementtips/2210/index.html">fancl.co.jp/clip/healthcare/supplementtips/2210</a></li>
+    </ul>
+  </div>
+</footer>
